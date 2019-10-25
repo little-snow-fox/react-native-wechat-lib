@@ -1,0 +1,17 @@
+.DS_Store
+node_modules
+/android/build
+/android/RCTWeChat.iml
+
+# ios
+ios/build
+
+# Xcode
+build/
+DerivedData/
+xcuserdata
+Pods/
+*.xcuserstate
+*.ipa
+*.dSYM.zip
+*.dSYM

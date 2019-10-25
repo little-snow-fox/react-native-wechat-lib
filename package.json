@@ -1,0 +1,38 @@
+{
+  "name": "react-native-wechat-lib",
+  "version": "1.1.0",
+  "description": "react-native library for wechat app",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/little-snow-fox/react-native-wechat-lib.git"
+  },
+  "keywords": [
+    "wechat",
+    "react-native",
+    "react",
+    "react-component",
+    "ios"
+  ],
+  "dependencies": {
+    "events": "1.0.1"
+  },
+  "peerDependencies": {
+    "react-native": ">=0.40"
+  },
+  "author": "little-snow-fox <fox@sfxh.cc>",
+  "contributors": [
+    {
+      "name": "little-snow-fox",
+      "email": "fox@sfxh.cc"
+    }
+  ],
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/little-snow-fox/react-native-wechat-lib/issues"
+  },
+  "homepage": "https://github.com/little-snow-fox/react-native-wechat-lib#readme"
+}
