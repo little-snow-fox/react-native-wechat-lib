@@ -23,6 +23,22 @@ declare module "react-native-wechat-lib" {
     lang?: string;
     country?: string;
   }
+  export interface WeChatReq {
+    type?: string,
+    errStr?: string,
+    extMsg?: string,
+    country?: string,
+    state?: string,
+    returnKey?: string
+  }
+  export interface WeChatResp {
+    type?: string,
+    errStr?: string,
+    extMsg?: string,
+    country?: string,
+    state?: string,
+    returnKey?: string
+  }
   export function sendAuthRequest(
     scope: string | string[],
     state?: string

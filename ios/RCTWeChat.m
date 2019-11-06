@@ -467,7 +467,7 @@ RCT_EXPORT_METHOD(pay:(NSDictionary *)data
         body[@"type"] = @"LaunchFromWX.Req";
         body[@"lang"] =  launchReq.lang;
         body[@"country"] = launchReq.country;
-        body[@"appParameter"] = appParameter;
+        body[@"extMsg"] = appParameter;
         [self.bridge.eventDispatcher sendDeviceEventWithName:RCTWXEventNameWeChatReq body:body];
     }
 }

@@ -26,7 +26,8 @@
 ## 安装
 
 ```sh
-$ npm install react-native-wechat-lib --save
+npm install react-native-wechat-lib --save
+react-native link react-native-wechat-lib
 ```
 
 ## 起步
