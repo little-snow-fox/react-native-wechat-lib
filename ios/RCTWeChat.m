@@ -389,7 +389,7 @@ RCT_EXPORT_METHOD(shareMiniProgram:(NSDictionary *)data
         object.hdImageData = [self compressImage: image toByte:131072];
     }
     object.withShareTicket = data[@"withShareTicket"];
-    object.miniProgramType = data[@"miniProgramType"] || WXMiniProgramTypeRelease;
+    object.miniProgramType = [data[@"miniProgramType"] integerValue];
     WXMediaMessage *message = [WXMediaMessage message];
     message.title = data[@"title"];
     message.description = data[@"description"];

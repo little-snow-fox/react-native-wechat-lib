@@ -270,6 +270,9 @@ export function shareWebpage(data) {
  * @param {Object} data
  */
 export function shareMiniProgram(data) {
+  if (data.miniProgramType == null) {
+    data.miniProgramType = 0
+  }
   return new Promise((resolve, reject) => {
     nativeShareMiniProgram(data);
     emitter.once('SendMessageToWX.Resp', resp => {
