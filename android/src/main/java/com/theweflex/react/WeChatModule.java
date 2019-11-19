@@ -240,6 +240,33 @@ public class WeChatModule extends ReactContextBaseJavaModule implements IWXAPIEv
     }
 
     /**
+     * 分享本地图片
+     * @param data
+     * @param callback
+     */
+    @ReactMethod
+    public void shareLocalImage(final ReadableMap data, final Callback callback) {
+        FileInputStream fs = new FileInputStream(data.getString("imageUrl"));
+        Bitmap bmp  = BitmapFactory.decodeStream(fs);
+        // 初始化 WXImageObject 和 WXMediaMessage 对象
+        WXImageObject imgObj = new WXImageObject(bmp);
+        WXMediaMessage msg = new WXMediaMessage();
+        msg.mediaObject = imgObj;
+
+        // 设置缩略图
+        msg.thumbData = bitmapResizeGetBytes(bmp, THUMB_SIZE);
+
+        // 构造一个Req
+        SendMessageToWX.Req req = new SendMessageToWX.Req();
+        req.transaction = "img";
+        req.message = msg;
+        // req.userOpenId = getOpenId();
+        req.scene = data.hasKey("scene") ? data.getInt("scene") : SendMessageToWX.Req.WXSceneSession;
+        callback.invoke(null, api.sendReq(req));
+
+    }
+
+    /**
      * 分享音乐
      * @param data
      * @param callback

@@ -118,6 +118,9 @@ declare module "react-native-wechat-lib" {
   export function shareImage(
     message: ShareImageMetadata
   ): Promise<{ errCode?: number; errStr?: string }>;
+  export function shareLocalImage(
+    message: ShareImageMetadata
+  ): Promise<{ errCode?: number; errStr?: string }>;
   export function shareMusic(
     message: ShareMusicMetadata
   ): Promise<{ errCode?: number; errStr?: string }>;

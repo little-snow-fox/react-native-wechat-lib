@@ -284,6 +284,51 @@ RCT_EXPORT_METHOD(shareImage:(NSDictionary *)data
     [WXApi sendReq:req completion:completion];
 }
 
+// 分享本地图片
+RCT_EXPORT_METHOD(shareLocalImage:(NSDictionary *)data
+                  :(RCTResponseSenderBlock)callback)
+{
+    NSString *imageUrl = data[@"imageUrl"];
+    if (imageUrl == NULL  || [imageUrl isEqual:@""]) {
+        callback([NSArray arrayWithObject:@"shareLocalImage: The value of ImageUrl cannot be empty."]);
+        return;
+    }
+    NSRange range = [imageUrl rangeOfString:@"."];
+    if ( range.length == 0)
+    {
+        callback([NSArray arrayWithObject:@"shareLocalImage: ImageUrl value, Could not find file suffix."]);
+        return;
+    }
+    
+    // 根据路径下载图片
+    UIImage *image = [UIImage imageWithContentsOfFile:imageUrl];
+    // 从 UIImage 获取图片数据
+    NSData *imageData = UIImageJPEGRepresentation(image, 1);
+    // 用图片数据构建 WXImageObject 对象
+    WXImageObject *imageObject = [WXImageObject object];
+    imageObject.imageData = imageData;
+    
+    WXMediaMessage *message = [WXMediaMessage message];
+    // 利用原图压缩出缩略图，确保缩略图大小不大于32KB
+    message.thumbData = [self compressImage: image toByte:32678];
+    message.mediaObject = imageObject;
+    message.title = data[@"title"];
+    message.description = data[@"description"];
+
+    SendMessageToWXReq *req = [[SendMessageToWXReq alloc] init];
+    req.bText = NO;
+    req.message = message;
+    req.scene = data[@"scene"] || WXSceneSession;
+    //    [WXApi sendReq:req];
+    void ( ^ completion )( BOOL );
+    completion = ^( BOOL success )
+    {
+        callback(@[success ? [NSNull null] : INVOKE_FAILED]);
+        return;
+    };
+    [WXApi sendReq:req completion:completion];
+}
+
 // 分享音乐
 RCT_EXPORT_METHOD(shareMusic:(NSDictionary *)data
                   :(RCTResponseSenderBlock)callback)

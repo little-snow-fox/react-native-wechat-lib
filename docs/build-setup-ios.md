@@ -12,7 +12,7 @@
 Add "URL Schema" as your app id for "URL type" in Targets > info, See 
 the following screenshot for the view on your XCode:
 
-![Set URL Schema in XCode](https://i.loli.net/2019/08/31/yUD2F5MrPKjngo3.jpg)
+![Set URL Schema in XCode](./../image/url-types.png)
 
 Cannot go back to APP from WeChat without configuration.  
 如果不配置，就无法从微信重新回到APP。    
@@ -27,6 +27,7 @@ then add:
 <array>
   <string>weixin</string>
   <string>wechat</string>
+  <string>weixinULAPI</string>
 </array>
 ```
 If not configured, apple will prevent you from jumping to WeChat due to security permissions.  

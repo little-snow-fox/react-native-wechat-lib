@@ -152,6 +152,33 @@ WeChat.shareImage({
 
 ```
 
+#### ShareLocalImage(ShareImageMetadata) 分享图片
+
+ShareImageMetadata
+
+| name    | type   | description                         |
+|---------|--------|-------------------------------------|
+| imageUrl| String | 图片地址                          |
+| scene   | Number | 分享到, 0:会话 2:朋友圈 3:收藏 |
+
+Return:
+
+| name    | type   | description                         |
+|---------|--------|-------------------------------------|
+| errCode | Number | 0 if authorization successed        |
+| errStr  | String | Error message if any error occurred |
+
+
+```js
+import * as WeChat from 'react-native-wechat-lib';
+
+WeChat.ShareLocalImage({
+  imageUrl: '/sdcard/test.png',
+  scene: 0
+})
+
+```
+
 #### ShareMusic(ShareMusicMetadata) 分享音乐
 
 ShareMusicMetadata
