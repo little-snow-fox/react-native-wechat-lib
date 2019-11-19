@@ -50,6 +50,8 @@ import com.tencent.mm.opensdk.constants.ConstantsAPI;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.UUID;
@@ -200,7 +202,7 @@ public class WeChatModule extends ReactContextBaseJavaModule implements IWXAPIEv
         //用 WXTextObject 对象初始化一个 WXMediaMessage 对象
         WXMediaMessage msg = new WXMediaMessage();
         msg.mediaObject = textObj;
-         msg.description = data.getString("text");
+        msg.description = data.getString("text");
 
         SendMessageToWX.Req req = new SendMessageToWX.Req();
         req.transaction = "text";
@@ -246,24 +248,29 @@ public class WeChatModule extends ReactContextBaseJavaModule implements IWXAPIEv
      */
     @ReactMethod
     public void shareLocalImage(final ReadableMap data, final Callback callback) {
-        FileInputStream fs = new FileInputStream(data.getString("imageUrl"));
-        Bitmap bmp  = BitmapFactory.decodeStream(fs);
-        // 初始化 WXImageObject 和 WXMediaMessage 对象
-        WXImageObject imgObj = new WXImageObject(bmp);
-        WXMediaMessage msg = new WXMediaMessage();
-        msg.mediaObject = imgObj;
+        FileInputStream fs = null;
+        try {
+            fs = new FileInputStream(data.getString("imageUrl"));
+            Bitmap bmp  = BitmapFactory.decodeStream(fs);
+            // 初始化 WXImageObject 和 WXMediaMessage 对象
+            WXImageObject imgObj = new WXImageObject(bmp);
+            WXMediaMessage msg = new WXMediaMessage();
+            msg.mediaObject = imgObj;
 
-        // 设置缩略图
-        msg.thumbData = bitmapResizeGetBytes(bmp, THUMB_SIZE);
+            // 设置缩略图
+            msg.thumbData = bitmapResizeGetBytes(bmp, THUMB_SIZE);
 
-        // 构造一个Req
-        SendMessageToWX.Req req = new SendMessageToWX.Req();
-        req.transaction = "img";
-        req.message = msg;
-        // req.userOpenId = getOpenId();
-        req.scene = data.hasKey("scene") ? data.getInt("scene") : SendMessageToWX.Req.WXSceneSession;
-        callback.invoke(null, api.sendReq(req));
-
+            // 构造一个Req
+            SendMessageToWX.Req req = new SendMessageToWX.Req();
+            req.transaction = "img";
+            req.message = msg;
+            // req.userOpenId = getOpenId();
+            req.scene = data.hasKey("scene") ? data.getInt("scene") : SendMessageToWX.Req.WXSceneSession;
+            callback.invoke(null, api.sendReq(req));
+        } catch (FileNotFoundException e) {
+            callback.invoke(null, false);
+            e.printStackTrace();
+        }
     }
 
     /**
