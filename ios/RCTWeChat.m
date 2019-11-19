@@ -229,7 +229,7 @@ RCT_EXPORT_METHOD(shareText:(NSDictionary *)data
     SendMessageToWXReq *req = [[SendMessageToWXReq alloc] init];
     req.bText = YES;
     req.text = data[@"text"];
-    req.scene = data[@"scene"] || WXSceneSession;
+    req.scene = [data[@"scene"] integerValue];
     void ( ^ completion )( BOOL );
     completion = ^( BOOL success )
     {
@@ -273,7 +273,7 @@ RCT_EXPORT_METHOD(shareImage:(NSDictionary *)data
     SendMessageToWXReq *req = [[SendMessageToWXReq alloc] init];
     req.bText = NO;
     req.message = message;
-    req.scene = data[@"scene"] || WXSceneSession;
+    req.scene = [data[@"scene"] integerValue];
     //    [WXApi sendReq:req];
     void ( ^ completion )( BOOL );
     completion = ^( BOOL success )
@@ -318,7 +318,7 @@ RCT_EXPORT_METHOD(shareLocalImage:(NSDictionary *)data
     SendMessageToWXReq *req = [[SendMessageToWXReq alloc] init];
     req.bText = NO;
     req.message = message;
-    req.scene = data[@"scene"] || WXSceneSession;
+    req.scene = [data[@"scene"] integerValue];
     //    [WXApi sendReq:req];
     void ( ^ completion )( BOOL );
     completion = ^( BOOL success )
@@ -352,7 +352,7 @@ RCT_EXPORT_METHOD(shareMusic:(NSDictionary *)data
     SendMessageToWXReq *req = [[SendMessageToWXReq alloc] init];
     req.bText = NO;
     req.message = message;
-    req.scene = data[@"scene"] || WXSceneSession;
+    req.scene = [data[@"scene"] integerValue];
     void ( ^ completion )( BOOL );
     completion = ^( BOOL success )
     {
@@ -381,7 +381,7 @@ RCT_EXPORT_METHOD(shareVideo:(NSDictionary *)data
     SendMessageToWXReq *req = [[SendMessageToWXReq alloc] init];
     req.bText = NO;
     req.message = message;
-    req.scene = data[@"scene"] || WXSceneSession;
+    req.scene = [data[@"scene"] integerValue];
     void ( ^ completion )( BOOL );
     completion = ^( BOOL success )
     {
@@ -409,7 +409,7 @@ RCT_EXPORT_METHOD(shareWebpage:(NSDictionary *)data
     SendMessageToWXReq *req = [[SendMessageToWXReq alloc] init];
     req.bText = NO;
     req.message = message;
-    req.scene = data[@"scene"] || WXSceneSession;
+    req.scene = [data[@"scene"] integerValue];
     void ( ^ completion )( BOOL );
     completion = ^( BOOL success )
     {
@@ -449,7 +449,7 @@ RCT_EXPORT_METHOD(shareMiniProgram:(NSDictionary *)data
     SendMessageToWXReq *req = [[SendMessageToWXReq alloc] init];
     req.bText = NO;
     req.message = message;
-    req.scene = data[@"scene"] || WXSceneSession;
+    req.scene = [data[@"scene"] integerValue];
     void ( ^ completion )( BOOL );
     completion = ^( BOOL success )
     {

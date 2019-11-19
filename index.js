@@ -182,6 +182,9 @@ export function sendAuthRequest(scopes, state) {
  * @param {Object} data
  */
 export function shareText(data) {
+  if (data && data.scene == null) {
+    data.scene = 0
+  }
   return new Promise((resolve, reject) => {
     nativeShareText(data);
     emitter.once('SendMessageToWX.Resp', resp => {
@@ -200,6 +203,9 @@ export function shareText(data) {
  * @param {Object} data
  */
 export function shareImage(data) {
+  if (data && data.scene == null) {
+    data.scene = 0
+  }
   return new Promise((resolve, reject) => {
     nativeShareImage(data);
     emitter.once('SendMessageToWX.Resp', resp => {
@@ -218,6 +224,9 @@ export function shareImage(data) {
  * @param {Object} data
  */
 export function shareLocalImage(data) {
+  if (data && data.scene == null) {
+    data.scene = 0
+  }
   return new Promise((resolve, reject) => {
     nativeShareLocalImage(data);
     emitter.once('SendMessageToWX.Resp', resp => {
@@ -236,6 +245,9 @@ export function shareLocalImage(data) {
  * @param {Object} data
  */
 export function shareMusic(data) {
+  if (data && data.scene == null) {
+    data.scene = 0
+  }
   return new Promise((resolve, reject) => {
     nativeShareMusic(data);
     emitter.once('SendMessageToWX.Resp', resp => {
@@ -254,6 +266,9 @@ export function shareMusic(data) {
  * @param {Object} data
  */
 export function shareVideo(data) {
+  if (data && data.scene == null) {
+    data.scene = 0
+  }
   return new Promise((resolve, reject) => {
     nativeShareVideo(data);
     emitter.once('SendMessageToWX.Resp', resp => {
@@ -272,6 +287,9 @@ export function shareVideo(data) {
  * @param {Object} data
  */
 export function shareWebpage(data) {
+  if (data && data.scene == null) {
+    data.scene = 0
+  }
   return new Promise((resolve, reject) => {
     nativeShareWebpage(data);
     emitter.once('SendMessageToWX.Resp', resp => {
@@ -289,37 +307,14 @@ export function shareWebpage(data) {
  * @param {Object} data
  */
 export function shareMiniProgram(data) {
-  if (data.miniProgramType == null) {
+  if (data && data.scene == null) {
+    data.scene = 0
+  }
+  if (data && data.miniProgramType == null) {
     data.miniProgramType = 0
   }
   return new Promise((resolve, reject) => {
     nativeShareMiniProgram(data);
-    emitter.once('SendMessageToWX.Resp', resp => {
-      if (resp.errCode === 0) {
-        resolve(resp);
-      } else {
-        reject(new WechatError(resp));
-      }
-    });
-  });
-}
-
-/**
- * Share something to timeline/moments/朋友圈
- * @method shareToTimeline
- * @param {Object} data
- * @param {String} data.thumbImage - Thumb image of the message, which can be a uri or a resource id.
- * @param {String} data.type - Type of this message. Could be {news|text|imageUrl|imageFile|imageResource|video|audio|file}
- * @param {String} data.webpageUrl - Required if type equals news. The webpage link to share.
- * @param {String} data.imageUrl - Provide a remote image if type equals image.
- * @param {String} data.videoUrl - Provide a remote video if type equals video.
- * @param {String} data.musicUrl - Provide a remote music if type equals audio.
- * @param {String} data.filePath - Provide a local file if type equals file.
- * @param {String} data.fileExtension - Provide the file type if type equals file.
- */
-export function shareToTimeline(data) {
-  return new Promise((resolve, reject) => {
-    nativeShareToTimeline(data);
     emitter.once('SendMessageToWX.Resp', resp => {
       if (resp.errCode === 0) {
         resolve(resp);
@@ -352,32 +347,6 @@ export function launchMiniProgram({userName, miniProgramType = 0, path = ''}) {
               reject(new WechatError(resp));
           }
       });
-  });
-}
-
-/**
- * Share something to a friend or group
- * @method shareToSession
- * @param {Object} data
- * @param {String} data.thumbImage - Thumb image of the message, which can be a uri or a resource id.
- * @param {String} data.type - Type of this message. Could be {news|text|imageUrl|imageFile|imageResource|video|audio|file}
- * @param {String} data.webpageUrl - Required if type equals news. The webpage link to share.
- * @param {String} data.imageUrl - Provide a remote image if type equals image.
- * @param {String} data.videoUrl - Provide a remote video if type equals video.
- * @param {String} data.musicUrl - Provide a remote music if type equals audio.
- * @param {String} data.filePath - Provide a local file if type equals file.
- * @param {String} data.fileExtension - Provide the file type if type equals file.
- */
-export function shareToSession(data) {
-  return new Promise((resolve, reject) => {
-    nativeShareToSession(data);
-    emitter.once('SendMessageToWX.Resp', resp => {
-      if (resp.errCode === 0) {
-        resolve(resp);
-      } else {
-        reject(new WechatError(resp));
-      }
-    });
   });
 }
 

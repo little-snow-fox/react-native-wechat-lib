@@ -133,9 +133,6 @@ declare module "react-native-wechat-lib" {
   export function shareMiniProgram(
     message: ShareMiniProgramMetadata
   ): Promise<{ errCode?: number; errStr?: string }>;
-  export function shareToTimeline(
-    message: ShareMetadata
-  ): Promise<{ errCode?: number; errStr?: string }>;
   export function launchMiniProgram(
     message: LaunchMiniProgramMetadata
   ): Promise<{ errCode?: number; errStr?: string }>;
