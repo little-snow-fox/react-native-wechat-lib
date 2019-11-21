@@ -250,7 +250,11 @@ public class WeChatModule extends ReactContextBaseJavaModule implements IWXAPIEv
     public void shareLocalImage(final ReadableMap data, final Callback callback) {
         FileInputStream fs = null;
         try {
-            fs = new FileInputStream(data.getString("imageUrl"));
+            String path = data.getString("imageUrl");
+            if (path.indexOf("file://") > -1) {
+                path = path.substring(7);
+            }
+            fs = new FileInputStream(path);
             Bitmap bmp  = BitmapFactory.decodeStream(fs);
             // 初始化 WXImageObject 和 WXMediaMessage 对象
             WXImageObject imgObj = new WXImageObject(bmp);
