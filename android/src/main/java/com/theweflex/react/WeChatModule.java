@@ -74,19 +74,24 @@ public class WeChatModule extends ReactContextBaseJavaModule implements IWXAPIEv
     }
 
     private static byte[] bitmapResizeGetBytes(Bitmap image, int size) {
-        // 这个压缩算法存在效率问题，希望有义士可以出手优化 by little-snow-fox 2019.10.20
+        // little-snow-fox 2019.10.20
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         // 质量压缩方法，这里100表示第一次不压缩，把压缩后的数据缓存到 baos
         image.compress(Bitmap.CompressFormat.JPEG, 100, baos);
-        int options = 10;
+        int options = 100;
         // 循环判断压缩后依然大于 32kb 则继续压缩
         while (baos.toByteArray().length / 1024 > size) {
             // 重置baos即清空baos
             baos.reset();
-            // 每次都减少1
-            options += 1;
+            if (options <= 1) {
+                break;
+            } else if (options > 5) {
+                options -= 5;
+            } else {
+                options -= 1;
+            }
             // 这里压缩options%，把压缩后的数据存放到baos中
-            image.compress(Bitmap.CompressFormat.JPEG, 10 / options * 10, baos);
+            image.compress(Bitmap.CompressFormat.JPEG, options, baos);
         }
         return baos.toByteArray();
     }
