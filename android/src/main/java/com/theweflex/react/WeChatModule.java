@@ -83,12 +83,10 @@ public class WeChatModule extends ReactContextBaseJavaModule implements IWXAPIEv
         while (baos.toByteArray().length / 1024 > size) {
             // 重置baos即清空baos
             baos.reset();
-            if (options <= 1) {
-                break;
-            } else if (options > 5) {
-                options -= 5;
+            if (options > 10) {
+                options -= 8;
             } else {
-                options -= 1;
+                return bitmapResizeGetBytes(Bitmap.createScaledBitmap(image, 280, image.getHeight() / image.getWidth() * 280, true), size);
             }
             // 这里压缩options%，把压缩后的数据存放到baos中
             image.compress(Bitmap.CompressFormat.JPEG, options, baos);
@@ -225,7 +223,13 @@ public class WeChatModule extends ReactContextBaseJavaModule implements IWXAPIEv
     public void shareImage(final ReadableMap data, final Callback callback) {
         this._getImage(Uri.parse(data.getString("imageUrl")), null, new ImageCallback() {
             @Override
-            public void invoke(@Nullable Bitmap bmp) {
+            public void invoke(@Nullable Bitmap bitmap) {
+                Bitmap bmp = bitmap;
+                int maxWidth = data.hasKey("maxWidth") ? data.getInt("maxWidth") : -1;
+                // 如果图片大于10MB而且没设置压缩，自动开启压缩
+                if (maxWidth > 0) {
+                    bmp = Bitmap.createScaledBitmap(bmp, maxWidth, bmp.getHeight() / bmp.getWidth() * maxWidth, true);
+                }
                 // 初始化 WXImageObject 和 WXMediaMessage 对象
                 WXImageObject imgObj = new WXImageObject(bmp);
                 WXMediaMessage msg = new WXMediaMessage();
@@ -259,13 +263,17 @@ public class WeChatModule extends ReactContextBaseJavaModule implements IWXAPIEv
             if (path.indexOf("file://") > -1) {
                 path = path.substring(7);
             }
+            int maxWidth = data.hasKey("maxWidth") ? data.getInt("maxWidth") : -1;
             fs = new FileInputStream(path);
             Bitmap bmp  = BitmapFactory.decodeStream(fs);
+            // 如果图片大于10MB而且没设置压缩，自动开启压缩
+            if (maxWidth > 0) {
+                bmp = Bitmap.createScaledBitmap(bmp, maxWidth, bmp.getHeight() / bmp.getWidth() * maxWidth, true);
+            }
             // 初始化 WXImageObject 和 WXMediaMessage 对象
             WXImageObject imgObj = new WXImageObject(bmp);
             WXMediaMessage msg = new WXMediaMessage();
             msg.mediaObject = imgObj;
-
             // 设置缩略图
             msg.thumbData = bitmapResizeGetBytes(bmp, THUMB_SIZE);
 
