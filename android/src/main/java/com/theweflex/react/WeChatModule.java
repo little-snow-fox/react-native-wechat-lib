@@ -832,7 +832,9 @@ public class WeChatModule extends ReactContextBaseJavaModule implements IWXAPIEv
             WXLaunchMiniProgram.Resp resp = (WXLaunchMiniProgram.Resp) baseResp;
             // 对应JsApi navigateBackApplication中的extraData字段数据
             String extraData = resp.extMsg;
+            map.putString("type", "WXLaunchMiniProgramReq.Resp");
             map.putString("extraData", extraData);
+            map.putString("extMsg", extraData);
         }
 
         this.getReactApplicationContext()
