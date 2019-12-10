@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.Environment;
+
 import androidx.annotation.Nullable;
 
 import com.facebook.common.executors.UiThreadImmediateExecutorService;
@@ -31,6 +33,7 @@ import com.tencent.mm.opensdk.modelbase.BaseReq;
 import com.tencent.mm.opensdk.modelbase.BaseResp;
 import com.tencent.mm.opensdk.modelmsg.SendAuth;
 import com.tencent.mm.opensdk.modelmsg.SendMessageToWX;
+import com.tencent.mm.opensdk.modelmsg.ShowMessageFromWX;
 import com.tencent.mm.opensdk.modelmsg.WXFileObject;
 import com.tencent.mm.opensdk.modelmsg.WXImageObject;
 import com.tencent.mm.opensdk.modelmsg.WXMediaMessage;
@@ -52,6 +55,8 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.UUID;
@@ -266,17 +271,36 @@ public class WeChatModule extends ReactContextBaseJavaModule implements IWXAPIEv
             int maxWidth = data.hasKey("maxWidth") ? data.getInt("maxWidth") : -1;
             fs = new FileInputStream(path);
             Bitmap bmp  = BitmapFactory.decodeStream(fs);
-            // 如果图片大于10MB而且没设置压缩，自动开启压缩
+
             if (maxWidth > 0) {
                 bmp = Bitmap.createScaledBitmap(bmp, maxWidth, bmp.getHeight() / bmp.getWidth() * maxWidth, true);
             }
+
+//            String fileName = System.currentTimeMillis() + ".jpg";
+//            String tempPath = path.substring(0, path.length() - 4) + "_upload.jpg";
+//            File file = new File(tempPath, fileName);
+//            try {
+//                FileOutputStream fos = new FileOutputStream(file);
+//                bmp.compress(Bitmap.CompressFormat.JPEG, 90, fos);
+//                fos.flush();
+//                fos.close();
+//            } catch (FileNotFoundException e) {
+//                e.printStackTrace();
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//            }
+
+//            int size = bmp.getByteCount();
+//            ByteArrayOutputStream var2 = new ByteArrayOutputStream();
+//            bmp.compress(Bitmap.CompressFormat.JPEG, 85, var2);
+//            int size2 = var2.toByteArray().length;
             // 初始化 WXImageObject 和 WXMediaMessage 对象
             WXImageObject imgObj = new WXImageObject(bmp);
             WXMediaMessage msg = new WXMediaMessage();
             msg.mediaObject = imgObj;
             // 设置缩略图
             msg.thumbData = bitmapResizeGetBytes(bmp, THUMB_SIZE);
-
+            bmp.recycle();
             // 构造一个Req
             SendMessageToWX.Req req = new SendMessageToWX.Req();
             req.transaction = "img";
@@ -801,7 +825,19 @@ public class WeChatModule extends ReactContextBaseJavaModule implements IWXAPIEv
 
     @Override
     public void onReq(BaseReq baseReq) {
-
+        WritableMap map = Arguments.createMap();
+        map.putString("openId", baseReq.openId);
+        map.putString("transaction", baseReq.transaction);
+        if (baseReq.getType() == ConstantsAPI.COMMAND_SHOWMESSAGE_FROM_WX) {
+            ShowMessageFromWX.Req req = (ShowMessageFromWX.Req) baseReq;
+            // 对应JsApi navigateBackApplication中的extraData字段数据
+            map.putString("type", "SendMessageToWX.Resp");
+            map.putString("lang", req.lang);
+            map.putString("country", req.message.messageExt);
+        }
+        this.getReactApplicationContext()
+                .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class)
+                .emit("WeChat_Resp", map);
     }
 
     @Override
