@@ -231,7 +231,6 @@ public class WeChatModule extends ReactContextBaseJavaModule implements IWXAPIEv
             public void invoke(@Nullable Bitmap bitmap) {
                 Bitmap bmp = bitmap;
                 int maxWidth = data.hasKey("maxWidth") ? data.getInt("maxWidth") : -1;
-                // 如果图片大于10MB而且没设置压缩，自动开启压缩
                 if (maxWidth > 0) {
                     bmp = Bitmap.createScaledBitmap(bmp, maxWidth, bmp.getHeight() / bmp.getWidth() * maxWidth, true);
                 }
@@ -254,7 +253,7 @@ public class WeChatModule extends ReactContextBaseJavaModule implements IWXAPIEv
         });
 
     }
-
+    // private static final String SDCARD_ROOT = Environment.getExternalStorageDirectory().getAbsolutePath();
     /**
      * 分享本地图片
      * @param data
@@ -268,20 +267,21 @@ public class WeChatModule extends ReactContextBaseJavaModule implements IWXAPIEv
             if (path.indexOf("file://") > -1) {
                 path = path.substring(7);
             }
-            int maxWidth = data.hasKey("maxWidth") ? data.getInt("maxWidth") : -1;
+//            int maxWidth = data.hasKey("maxWidth") ? data.getInt("maxWidth") : -1;
             fs = new FileInputStream(path);
             Bitmap bmp  = BitmapFactory.decodeStream(fs);
 
-            if (maxWidth > 0) {
-                bmp = Bitmap.createScaledBitmap(bmp, maxWidth, bmp.getHeight() / bmp.getWidth() * maxWidth, true);
-            }
+//            if (maxWidth > 0) {
+//                bmp = Bitmap.createScaledBitmap(bmp, maxWidth, bmp.getHeight() / bmp.getWidth() * maxWidth, true);
+//            }
 
-//            String fileName = System.currentTimeMillis() + ".jpg";
-//            String tempPath = path.substring(0, path.length() - 4) + "_upload.jpg";
-//            File file = new File(tempPath, fileName);
+//            File f = Environment.getExternalStoragePublicDirectory(SDCARD_ROOT + "/react-native-wechat-lib");
+//            String fileName = "wechat-share.jpg";
+//            String tempPath = SDCARD_ROOT + "/react-native-wechat-lib";
+//            File file = new File(f, fileName);
 //            try {
 //                FileOutputStream fos = new FileOutputStream(file);
-//                bmp.compress(Bitmap.CompressFormat.JPEG, 90, fos);
+//                bmp.compress(Bitmap.CompressFormat.JPEG, 100, fos);
 //                fos.flush();
 //                fos.close();
 //            } catch (FileNotFoundException e) {
@@ -295,7 +295,9 @@ public class WeChatModule extends ReactContextBaseJavaModule implements IWXAPIEv
 //            bmp.compress(Bitmap.CompressFormat.JPEG, 85, var2);
 //            int size2 = var2.toByteArray().length;
             // 初始化 WXImageObject 和 WXMediaMessage 对象
-            WXImageObject imgObj = new WXImageObject(bmp);
+
+            WXImageObject imgObj = new WXImageObject();
+            imgObj.setImagePath(path);
             WXMediaMessage msg = new WXMediaMessage();
             msg.mediaObject = imgObj;
             // 设置缩略图

@@ -152,7 +152,7 @@ WeChat.shareImage({
 
 ```
 
-#### ShareLocalImage(ShareImageMetadata) 分享图片
+#### ShareLocalImage(ShareImageMetadata) 分享本地图片
 
 ShareImageMetadata
 
@@ -178,6 +178,7 @@ WeChat.ShareLocalImage({
 })
 
 ```
+注意：图片路径必须在一个 Public 目录里，例如 Download 目录，否则微信没权限读取这张图片，导致图片发不出去。
 
 #### ShareMusic(ShareMusicMetadata) 分享音乐
 

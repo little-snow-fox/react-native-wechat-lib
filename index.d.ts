@@ -68,8 +68,7 @@ declare module "react-native-wechat-lib" {
   }
   export interface ShareImageMetadata {
     imageUrl: string,
-    scene?: WXScene,
-    maxWidth?: number
+    scene?: WXScene
   }
   export interface ShareMusicMetadata {
     musicUrl: string,
