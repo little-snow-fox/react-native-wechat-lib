@@ -112,3 +112,24 @@ Then add the following node to `AndroidManifest.xml`:
   </application>
 </manifest>
 ```
+
+如果遇到安卓App拉起小程序后，小程序无法返回App的情况，需要在AndroidManifest.xml的WXEntryActivity中添加下面这段配置:
+```
+android:taskAffinity="your packagename"
+android:launchMode="singleTask"
+```
+保证跳转后回到你的app的task。  
+实际上，我的代码如下：
+```xml
+<manifest>
+  <application>
+    <activity
+      android:name=".wxapi.WXEntryActivity"
+      android:label="@string/app_name"
+      android:exported="true"
+      android:taskAffinity="org.xxx.xxx.rnapp"
+      android:launchMode="singleTask"
+    />
+  </application>
+</manifest>
+```
