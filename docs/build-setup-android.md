@@ -1,27 +1,5 @@
 # Build Setup for Android
 
-Copy lines to `android/settings.gradle`:
-
-```gradle
-include ':RCTWeChat'
-project(':RCTWeChat').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-wechat/android')
-```
-
-Copy lines to `android/app/build.gradle`
-
-```gradle
-dependencies {
-  implementation project(':RCTWeChat') // Add this line
-}
-```
-
-Copy lines to `proguard-rules.pro`:
-
-```pro
--keep class com.tencent.mm.sdk.** {
-  *;
-}
-```
 
 Then update `MainActivity.java` or `MainApplication.java`:
 

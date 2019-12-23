@@ -105,7 +105,7 @@ ShareTextMetadata
 | name    | type   | description                      |
 |---------|--------|----------------------------------|
 | text    | String | 分享文本                          |
-| scene   | Number | 分享到, 0:会话 2:朋友圈 3:收藏      |
+| scene   | Number | 分享到, 0:会话 1:朋友圈 2:收藏      |
 
 Return:
 
@@ -132,7 +132,7 @@ ShareImageMetadata
 | name    | type   | description                         |
 |---------|--------|-------------------------------------|
 | imageUrl| String | 图片地址                          |
-| scene   | Number | 分享到, 0:会话 2:朋友圈 3:收藏 |
+| scene   | Number | 分享到, 0:会话 1:朋友圈 2:收藏 |
 
 Return:
 
@@ -159,7 +159,7 @@ ShareImageMetadata
 | name    | type   | description                         |
 |---------|--------|-------------------------------------|
 | imageUrl| String | 图片地址                          |
-| scene   | Number | 分享到, 0:会话 2:朋友圈 3:收藏 |
+| scene   | Number | 分享到, 0:会话 1:朋友圈 2:收藏 |
 
 Return:
 
@@ -193,7 +193,7 @@ ShareMusicMetadata
 | musicLowBandUrl     | String | 供低带宽环境下使用的音频网页URL地址 |  
 | musicDataUrl        | String | 音频数据的URL地址                |  
 | musicLowBandDataUrl | String | 供低带宽环境下使用的音频数据URL地址 |  
-| scene               | Number | 分享到, 0:会话 2:朋友圈 3:收藏    |  
+| scene               | Number | 分享到, 0:会话 1:朋友圈 2:收藏    |  
 
 Return:
 
@@ -226,7 +226,7 @@ ShareVideoMetadata
 | thumbImageUrl| String | 缩略图地址，本库会自动压缩到32KB |
 | videoUrl| String | 视频链接                       |
 | videoLowBandUrl| String | 供低带宽的环境下使用的视频链接 |
-| scene   | Number | 分享到, 0:会话 2:朋友圈 3:收藏 |
+| scene   | Number | 分享到, 0:会话 1:朋友圈 2:收藏 |
 
 Return:
 
@@ -258,7 +258,7 @@ ShareWebpageMetadata
 | description| String | 描述                       |
 | thumbImageUrl| String | 缩略图地址，本库会自动压缩到32KB |
 | webpageUrl| String | HTML 链接                     |
-| scene   | Number | 分享到, 0:会话 2:朋友圈 3:收藏 |
+| scene   | Number | 分享到, 0:会话 1:朋友圈 2:收藏 |
 
 Return:
 
@@ -295,7 +295,7 @@ ShareMiniProgram
 | withShareTicket| String | 是否使用带shareTicket的分享            |
 | miniProgramType| Number | 小程序的类型，默认正式版，1.8.1及以上版本开发者工具包支持分享开发版和体验版小程序 |
 | webpageUrl| String | 兼容低版本的网页链接                   |
-| scene   | Number | 分享到, 0:会话 2:朋友圈 3:收藏 |
+| scene   | Number | 分享到, 0:会话 1:朋友圈 2:收藏 |
 
 Return:
 
