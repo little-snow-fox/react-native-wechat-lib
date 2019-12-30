@@ -57,13 +57,13 @@ Universal Links 配置文件, 没使用的话可以忽略。
 ```objc
 #import <React/RCTLinkingManager.h>
 
-// ios 8.x or older
-- (BOOL)application:(UIApplication *)application openURL:(NSURL *)url
-sourceApplication:(NSString *)sourceApplication annotation:(id)annotation
-{
-  [RCTLinkingManager application:application openURL:url options:options];
-  return [WXApi handleOpenURL:url delegate:self];
-}
+// ios 8.x or older 不建议再使用这段配置，所以注释掉
+// - (BOOL)application:(UIApplication *)application openURL:(NSURL *)url
+// sourceApplication:(NSString *)sourceApplication annotation:(id)annotation
+// {
+//   [RCTLinkingManager application:application openURL:url options:options];
+//   return [WXApi handleOpenURL:url delegate:self];
+// }
 
 // ios 9.0+
 - (BOOL)application:(UIApplication *)application openURL:(NSURL *)url
@@ -75,3 +75,17 @@ sourceApplication:(NSString *)sourceApplication annotation:(id)annotation
   return [WXApi handleOpenURL:url delegate:self];
 }
 ```
+## 3. Then copy the following in `AppDelegate.h`: 
+```
+#import <React/RCTBridgeDelegate.h>
+#import <UIKit/UIKit.h>
+#import "WXApi.h"
+
+@interface AppDelegate : UIResponder <UIApplicationDelegate, RCTBridgeDelegate, WXApiDelegate>
+
+@property (nonatomic, strong) UIWindow *window;
+
+@end
+```
+Mainly need to add '#import "WXApi.h"' and 'wxapidelegate'.  
+主要是需要加上 '#import "WXApi.h"' 和 'WXApiDelegate' 。
