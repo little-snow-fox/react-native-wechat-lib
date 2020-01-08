@@ -77,6 +77,7 @@ Universal Links 配置文件, 没使用的话可以忽略。
   return [WXApi handleOpenURL:url delegate:self];
 }
 ```
+**注意：不使用 Universal Links 会导致调用微信支付成功后无法获取回调事件。**
 ## 3. Then copy the following in `AppDelegate.h`: 
 ```
 #import <React/RCTBridgeDelegate.h>
