@@ -459,6 +459,23 @@ RCT_EXPORT_METHOD(shareMiniProgram:(NSDictionary *)data
     [WXApi sendReq:req completion:completion];
 }
 
+// 一次性订阅消息
+RCT_EXPORT_METHOD(subscribeMessage:(NSDictionary *)data
+                  :(RCTResponseSenderBlock)callback)
+{
+    WXSubscribeMsgReq *req = [[WXSubscribeMsgReq alloc] init];
+    req.scene = [data[@"scene"] integerValue];
+    req.templateId = data[@"templateId"];
+    req.reserved = data[@"reserved"];
+    void ( ^ completion )( BOOL );
+    completion = ^( BOOL success )
+    {
+        callback(@[success ? [NSNull null] : INVOKE_FAILED]);
+        return;
+    };
+    [WXApi sendReq:req completion:completion];
+}
+
 RCT_EXPORT_METHOD(launchMiniProgram:(NSDictionary *)data
                   :(RCTResponseSenderBlock)callback)
 {

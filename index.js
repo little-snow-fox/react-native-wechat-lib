@@ -156,6 +156,8 @@ const nativeShareMusic = wrapApi(WeChat.shareMusic);
 const nativeShareVideo = wrapApi(WeChat.shareVideo);
 const nativeShareWebpage = wrapApi(WeChat.shareWebpage);
 const nativeShareMiniProgram = wrapApi(WeChat.shareMiniProgram);
+const nativeSubscribeMessage = wrapApi(WeChat.subscribeMessage);
+
 
 /**
  * @method sendAuthRequest
@@ -347,6 +349,27 @@ export function launchMiniProgram({userName, miniProgramType = 0, path = ''}) {
               reject(new WechatError(resp));
           }
       });
+  });
+}
+
+/**
+ * 一次性订阅消息
+ * @method shareVideo
+ * @param {Object} data
+ */
+export function subscribeMessage(data) {
+  if (data && data.scene == null) {
+    data.scene = 0
+  }
+  return new Promise((resolve, reject) => {
+    nativeSubscribeMessage(data);
+    emitter.once('WXSubscribeMsgReq.Resp', resp => {
+      if (resp.errCode === 0) {
+        resolve(resp);
+      } else {
+        reject(new WechatError(resp));
+      }
+    });
   });
 }
 

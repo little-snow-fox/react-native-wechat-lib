@@ -515,6 +515,20 @@ public class WeChatModule extends ReactContextBaseJavaModule implements IWXAPIEv
         if (!success) callback.invoke(INVALID_ARGUMENT);
     }
 
+    /**
+     * 一次性订阅消息
+     * @param data
+     * @param callback
+     */
+    @ReactMethod
+    public void subscribeMessage(ReadableMap data, Callback callback) {
+        SubscribeMessage.Req req = new SubscribeMessage.Req();
+        req.scene = data.hasKey("scene") ? data.getInt("scene") : SendMessageToWX.Req.WXSceneSession;
+        req.templateID = data.getString("templateId");
+        req.reserved = data.getString("reserved");
+        callback.invoke(null, api.sendReq(req));
+    }
+
     @ReactMethod
     public void shareToSession(ReadableMap data, Callback callback) {
         if (api == null) {

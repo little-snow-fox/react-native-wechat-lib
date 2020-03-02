@@ -112,6 +112,13 @@ declare module "react-native-wechat-lib" {
     miniProgramType?: number,
     path?: string
   }
+
+  export interface SubscribeMessageMetadata {
+    scene?: WXScene,
+    templateId: string,
+    reserved?: string
+  }
+
   export function shareText(
     message: ShareTextMetadata
   ): Promise<{ errCode?: number; errStr?: string }>;
@@ -135,6 +142,9 @@ declare module "react-native-wechat-lib" {
   ): Promise<{ errCode?: number; errStr?: string }>;
   export function launchMiniProgram(
     message: LaunchMiniProgramMetadata
+  ): Promise<{ errCode?: number; errStr?: string }>;
+  export function subscribeMessage(
+    message: SubscribeMessageMetadata
   ): Promise<{ errCode?: number; errStr?: string }>;
   export interface PaymentLoad {
     partnerId: string;
