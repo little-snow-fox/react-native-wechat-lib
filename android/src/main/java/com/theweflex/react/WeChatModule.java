@@ -49,6 +49,7 @@ import com.tencent.mm.opensdk.openapi.IWXAPI;
 import com.tencent.mm.opensdk.openapi.IWXAPIEventHandler;
 import com.tencent.mm.opensdk.openapi.WXAPIFactory;
 import com.tencent.mm.opensdk.constants.ConstantsAPI;
+import com.tencent.mm.opensdk.modelbiz.SubscribeMessage;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -296,8 +297,7 @@ public class WeChatModule extends ReactContextBaseJavaModule implements IWXAPIEv
 //            int size2 = var2.toByteArray().length;
             // 初始化 WXImageObject 和 WXMediaMessage 对象
 
-            WXImageObject imgObj = new WXImageObject();
-            imgObj.setImagePath(path);
+            WXImageObject imgObj = new WXImageObject(bmp);
             WXMediaMessage msg = new WXMediaMessage();
             msg.mediaObject = imgObj;
             // 设置缩略图
