@@ -341,7 +341,9 @@ public class WeChatModule extends ReactContextBaseJavaModule implements IWXAPIEv
                 @Override
                 public void invoke(@Nullable Bitmap bmp) {
                     // 设置缩略图
-                    msg.thumbData = bitmapResizeGetBytes(bmp, THUMB_SIZE);
+                    if (bmp != null) {
+                        msg.thumbData = bitmapResizeGetBytes(bmp, THUMB_SIZE);
+                    }
                     // 构造一个Req
                     SendMessageToWX.Req req = new SendMessageToWX.Req();
                     req.transaction = "music";
@@ -382,7 +384,9 @@ public class WeChatModule extends ReactContextBaseJavaModule implements IWXAPIEv
                 @Override
                 public void invoke(@Nullable Bitmap bmp) {
                     // 设置缩略图
-                    msg.thumbData = bitmapResizeGetBytes(bmp, THUMB_SIZE);
+                    if (bmp != null) {
+                        msg.thumbData = bitmapResizeGetBytes(bmp, THUMB_SIZE);
+                    }
                     // 构造一个Req
                     SendMessageToWX.Req req = new SendMessageToWX.Req();
                     req.transaction = "video";
@@ -422,7 +426,9 @@ public class WeChatModule extends ReactContextBaseJavaModule implements IWXAPIEv
                 @Override
                 public void invoke(@Nullable Bitmap bmp) {
                     // 设置缩略图
-                    msg.thumbData = bitmapResizeGetBytes(bmp, THUMB_SIZE);
+                    if (bmp != null) {
+                        msg.thumbData = bitmapResizeGetBytes(bmp, THUMB_SIZE);
+                    }
                     // 构造一个Req
                     SendMessageToWX.Req req = new SendMessageToWX.Req();
                     req.transaction = "webpage";
@@ -470,7 +476,9 @@ public class WeChatModule extends ReactContextBaseJavaModule implements IWXAPIEv
                 @Override
                 public void invoke(@Nullable Bitmap bmp) {
                     // 小程序消息封面图片，小于128k
-                    msg.thumbData = bitmapResizeGetBytes(bmp, 128);
+                    if (bmp != null) {
+                        msg.thumbData = bitmapResizeGetBytes(bmp, 128);
+                    }
                     // 构造一个Req
                     SendMessageToWX.Req req = new SendMessageToWX.Req();
                     req.transaction = "miniProgram";
