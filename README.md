@@ -375,7 +375,8 @@ Sends request for proceeding payment, then returns an object:
 | templateId  | String | 订阅消息模板 ID，在微信开放平台提交应用审核通过后获得 |
 | reserved  | String | 用于保持请求和回调的状态，授权请后原样带回给第三方。该参数可用于防止 csrf 攻击（跨站请求伪造攻击），建议第三方带上该参数，可设置为简单的随机数加 session 进行校验，开发者可以填写 a-zA-Z0-9 的参数值，最多 128 字节，要求做 urlencode |  
 
-#### 订阅回调事件
+#### 回调事件订阅
+从小程序回到APP，或者支付成功回到APP都会触发回调事件来返回相应信息，请在触发相应方法前提前添加事件队列。
 ```
     WeChat.registerApp(Global.APP_ID, Global.UNIVERSAL_LINK);
     DeviceEventEmitter.addListener('WeChat_Req', req => {
