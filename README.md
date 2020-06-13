@@ -4,7 +4,7 @@
 
 [React Native] bridging library that integrates WeChat SDKs:
 
-- [x] iOS SDK 1.8.6.1
+- [x] iOS SDK 1.8.7.1
 - [x] Android SDK 5.5.6
 
 ## 前言
@@ -16,6 +16,11 @@
 考虑到自身使用和其它开发者的需要，最终决定开一个新仓库，提供给新项目使用。  
 
 最后，感谢 [yorkie](https://github.com/yorkie) 和各位开发者为 react-native-wechat 做出的贡献。
+
+## 附言
+
+如果你的 IOS 版本需要使用不带支付功能的 WeChat SDK，请使用带有 “-notpay” 后缀的 NPM 包。
+If you need to use the WeChat SDK without payment for your IOS version, use the NPM package with the suffix "-notpay".
 
 ## 目录
 

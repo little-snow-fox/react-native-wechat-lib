@@ -1,3 +1,16 @@
+重要!
+
+SDK1.8.7.1
+1. 修复Xcode11以下编译不通过
+
+SDK1.8.7
+1. 修复iPadOS，未安装微信的情况下，因为UA问题无法授权登录
+2. 修复未安装微信的情况下, 适配了UIScene的App因为UIAlertView Crash
+3. 增加Universal Link检测函数
+
+SDK1.8.6.2
+1. 修改包含"UIWebView"字符的类名
+
 SDK1.8.6.1
 1.短信授权登录使用的UIWebview切换成WKWebview
 
