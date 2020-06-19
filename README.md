@@ -19,7 +19,7 @@
 
 ## 附言
 
-如果你的 IOS 版本需要使用不带支付功能的 WeChat SDK，请使用带有 “-notpay” 后缀的 NPM 包。  
+如果你的 IOS 应用需要使用**不带支付功能**的 WeChat SDK，请使用带有 “-notpay” 后缀的 NPM 包。  
 If you need to use the WeChat SDK without payment for your IOS version, use the NPM package with the suffix "-notpay".
 
 ## 目录
