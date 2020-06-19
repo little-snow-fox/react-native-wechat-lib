@@ -498,26 +498,26 @@ RCT_EXPORT_METHOD(launchMiniProgram:(NSDictionary *)data
     // callback(@[success ? [NSNull null] : INVOKE_FAILED]);
 }
 
-RCT_EXPORT_METHOD(pay:(NSDictionary *)data
-                  :(RCTResponseSenderBlock)callback)
-{
-    PayReq* req             = [PayReq new];
-    req.partnerId           = data[@"partnerId"];
-    req.prepayId            = data[@"prepayId"];
-    req.nonceStr            = data[@"nonceStr"];
-    req.timeStamp           = [data[@"timeStamp"] unsignedIntValue];
-    req.package             = data[@"package"];
-    req.sign                = data[@"sign"];
-    void ( ^ completion )( BOOL );
-    completion = ^( BOOL success )
-    {
-        callback(@[success ? [NSNull null] : INVOKE_FAILED]);
-        return;
-    };
-    [WXApi sendReq:req completion:completion];
-    // BOOL success = [WXApi sendReq:req];
-    // callback(@[success ? [NSNull null] : INVOKE_FAILED]);
-}
+//RCT_EXPORT_METHOD(pay:(NSDictionary *)data
+//                  :(RCTResponseSenderBlock)callback)
+//{
+//    PayReq* req             = [PayReq new];
+//    req.partnerId           = data[@"partnerId"];
+//    req.prepayId            = data[@"prepayId"];
+//    req.nonceStr            = data[@"nonceStr"];
+//    req.timeStamp           = [data[@"timeStamp"] unsignedIntValue];
+//    req.package             = data[@"package"];
+//    req.sign                = data[@"sign"];
+//    void ( ^ completion )( BOOL );
+//    completion = ^( BOOL success )
+//    {
+//        callback(@[success ? [NSNull null] : INVOKE_FAILED]);
+//        return;
+//    };
+//    [WXApi sendReq:req completion:completion];
+//    // BOOL success = [WXApi sendReq:req];
+//    // callback(@[success ? [NSNull null] : INVOKE_FAILED]);
+//}
 
 #pragma mark - wx callback
 
@@ -566,14 +566,14 @@ RCT_EXPORT_METHOD(pay:(NSDictionary *)data
         else {
             [self.bridge.eventDispatcher sendDeviceEventWithName:RCTWXEventName body:body];
         }
-    } else if ([resp isKindOfClass:[PayResp class]]) {
-        PayResp *r = (PayResp *)resp;
-        NSMutableDictionary *body = @{@"errCode":@(r.errCode)}.mutableCopy;
-        body[@"errStr"] = r.errStr;
-        body[@"type"] = @(r.type);
-        body[@"returnKey"] =r.returnKey;
-        body[@"type"] = @"PayReq.Resp";
-        [self.bridge.eventDispatcher sendDeviceEventWithName:RCTWXEventName body:body];
+//    } else if ([resp isKindOfClass:[PayResp class]]) {
+//        PayResp *r = (PayResp *)resp;
+//        NSMutableDictionary *body = @{@"errCode":@(r.errCode)}.mutableCopy;
+//        body[@"errStr"] = r.errStr;
+//        body[@"type"] = @(r.type);
+//        body[@"returnKey"] =r.returnKey;
+//        body[@"type"] = @"PayReq.Resp";
+//        [self.bridge.eventDispatcher sendDeviceEventWithName:RCTWXEventName body:body];
     } else if ([resp isKindOfClass:[WXLaunchMiniProgramResp class]]){
         WXLaunchMiniProgramResp *r = (WXLaunchMiniProgramResp *)resp;
         NSMutableDictionary *body = @{@"errCode":@(r.errCode)}.mutableCopy;

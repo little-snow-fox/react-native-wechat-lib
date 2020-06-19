@@ -1,6 +1,6 @@
 {
   "name": "react-native-wechat-lib",
-  "version": "1.1.18",
+  "version": "1.1.19-notpay",
   "description": "react-native library for wechat app. 支持分享和拉起小程序。",
   "main": "index.js",
   "scripts": {
