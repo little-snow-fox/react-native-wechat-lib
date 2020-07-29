@@ -477,7 +477,8 @@ public class WeChatModule extends ReactContextBaseJavaModule implements IWXAPIEv
                 public void invoke(@Nullable Bitmap bmp) {
                     // 小程序消息封面图片，小于128k
                     if (bmp != null) {
-                        msg.thumbData = bitmapResizeGetBytes(bmp, 128);
+                        // 设置size为128有时候微信会报错图片太大, 无法成功分享, 故设为100
+                        msg.thumbData = bitmapResizeGetBytes(bmp, 100);
                     }
                     // 构造一个Req
                     SendMessageToWX.Req req = new SendMessageToWX.Req();
