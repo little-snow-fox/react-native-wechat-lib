@@ -8,8 +8,8 @@
 
 Pod::Spec.new do |s|
   s.name         = "RCTWeChat"
-  s.version      = "0.1.0"
-  s.summary      = "React-Native(iOS/Android) functionalities include WeChat Login, Share, Favorite and Payment {QQ: 336021910}"
+  s.version      = package['version']
+  s.summary      = "React-Native(iOS/Android) functionalities include WeChat Login, Share, Favorite and Payment"
 
   # This description is used to generate tags and improve search results.
   #   * Think: What does it do? Why did you write it? What is the focus?
@@ -17,13 +17,13 @@ Pod::Spec.new do |s|
   #   * Write the description between the DESC delimiters below.
   #   * Finally, don't worry about the indent, CocoaPods strips it!
   s.description  = <<-DESC
-                  React-Native(iOS/Android) functionalities include WeChat Login, Share, Favorite and Payment {QQ: 336021910}
+                  React-Native(iOS/Android) functionalities include WeChat Login, Share, Favorite and Payment
                    DESC
 
   s.homepage     = "https://github.com/weflex/react-native-wechat"
   s.license      = "MIT"
   # s.license      = { :type => "MIT", :file => "FILE_LICENSE" }
-  s.author             = { "weflex" => "336021910@qq.com" }
+  s.author             = { "weflex" => "fox@sfxh.cc" }
   s.platform     = :ios, "7.0"
   s.source       = { :git => "https://github.com/weflex/react-native-wechat.git", :tag => "master" }
   s.source_files  = "**/*.{h,m}"

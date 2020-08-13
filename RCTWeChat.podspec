@@ -8,10 +8,10 @@
 
 Pod::Spec.new do |s|
   s.name         = "RCTWeChat"
-  s.version      = "1.9.12"
-  s.summary      = "React-Native(iOS/Android) functionalities include WeChat Login, Share, Favorite and Payment {QQ: 336021910}"
+  s.version      = package['version']
+  s.summary      = "React-Native(iOS/Android) functionalities include WeChat Login, Share, Favorite and Payment"
   s.description  = <<-DESC
-  React-Native(iOS/Android) functionalities include WeChat Login, Share, Favorite and Payment {QQ: 336021910}
+  React-Native(iOS/Android) functionalities include WeChat Login, Share, Favorite and Payment
    DESC
   s.author       = { "little-snow-fox" => "fox@sfxh.cc" }
   s.homepage     = "https://github.com/little-snow-fox/react-native-wechat-lib"
