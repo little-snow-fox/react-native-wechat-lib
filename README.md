@@ -116,7 +116,7 @@ Return:
 
 | name    | type   | description                         |
 |---------|--------|-------------------------------------|
-| errCode | Number | 0 if authorization successed        |
+| errCode | Number | 0 if authorization succeed          |
 | errStr  | String | Error message if any error occurred |
 
 
@@ -143,7 +143,7 @@ Return:
 
 | name    | type   | description                         |
 |---------|--------|-------------------------------------|
-| errCode | Number | 0 if authorization successed        |
+| errCode | Number | 0 if authorization succeed          |
 | errStr  | String | Error message if any error occurred |
 
 
@@ -170,7 +170,7 @@ Return:
 
 | name    | type   | description                         |
 |---------|--------|-------------------------------------|
-| errCode | Number | 0 if authorization successed        |
+| errCode | Number | 0 if authorization succeed          |
 | errStr  | String | Error message if any error occurred |
 
 
@@ -204,7 +204,7 @@ Return:
 
 | name    | type   | description                         |
 |---------|--------|-------------------------------------|
-| errCode | Number | 0 if authorization successed        |
+| errCode | Number | 0 if authorization succeed          |
 | errStr  | String | Error message if any error occurred |
 
 
@@ -237,7 +237,7 @@ Return:
 
 | name    | type   | description                         |
 |---------|--------|-------------------------------------|
-| errCode | Number | 0 if authorization successed        |
+| errCode | Number | 0 if authorization succeed          |
 | errStr  | String | Error message if any error occurred |
 
 
@@ -269,7 +269,7 @@ Return:
 
 | name    | type   | description                         |
 |---------|--------|-------------------------------------|
-| errCode | Number | 0 if authorization successed        |
+| errCode | Number | 0 if authorization succeed          |
 | errStr  | String | Error message if any error occurred |
 
 
@@ -306,7 +306,7 @@ Return:
 
 | name    | type   | description                         |
 |---------|--------|-------------------------------------|
-| errCode | Number | 0 if authorization successed        |
+| errCode | Number | 0 if authorization succeed          |
 | errStr  | String | Error message if any error occurred |
 
 
@@ -337,7 +337,7 @@ Return:
 
 | name    | type   | description                         |
 |---------|--------|-------------------------------------|
-| errCode | Number | 0 if authorization successed        |
+| errCode | Number | 0 if authorization succeed          |
 | errStr  | String | Error message if any error occurred |
 
 
@@ -366,7 +366,7 @@ Sends request for proceeding payment, then returns an object:
 
 | name    | type   | description                         |
 |---------|--------|-------------------------------------|
-| errCode | Number | 0 if authorization successed        |
+| errCode | Number | 0 if authorization succeed          |
 | errStr  | String | Error message if any error occurred |
 
 #### subscribeMessage(SubscribeMessageMetadata) 一次性订阅消息
