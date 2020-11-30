@@ -15,3 +15,5 @@ Pods/
 *.ipa
 *.dSYM.zip
 *.dSYM
+.idea
+android/.gradle
