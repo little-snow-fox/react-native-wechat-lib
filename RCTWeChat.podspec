@@ -25,6 +25,6 @@ Pod::Spec.new do |s|
   s.dependency "React"
   s.vendored_libraries = "ios/libWeChatSDK.a"
   s.requires_arc = true
-  s.frameworks = 'SystemConfiguration','CoreTelephony'
+  s.frameworks = 'SystemConfiguration','CoreTelephony','WebKit'
   s.library = 'sqlite3','c++','z'
 end
