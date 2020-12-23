@@ -1,7 +1,7 @@
 'use strict';
 
-import { DeviceEventEmitter, NativeModules, Platform } from 'react-native';
 import { EventEmitter } from 'events';
+import { DeviceEventEmitter, NativeModules, Platform } from 'react-native';
 
 let isAppRegistered = false;
 const { WeChat } = NativeModules;
@@ -25,12 +25,12 @@ function wrapRegisterApp(nativeFunc) {
     if (isAppRegistered) {
       return Promise.resolve(true);
     }
-    isAppRegistered = true;
     return new Promise((resolve, reject) => {
       nativeFunc.apply(null, [
         ...args,
         (error, result) => {
           if (!error) {
+            isAppRegistered = true;
             return resolve(result);
           }
           if (typeof error === 'string') {
@@ -165,7 +165,6 @@ const nativeSubscribeMessage = wrapApi(WeChat.subscribeMessage);
  * @return {Promise}
  */
 export function sendAuthRequest(scopes, state) {
-  console.warn('sendAuthRequest')
   return new Promise((resolve, reject) => {
     WeChat.sendAuthRequest(scopes, state, () => {});
     emitter.once('SendAuth.Resp', resp => {
