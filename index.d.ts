@@ -158,6 +158,6 @@ declare module 'react-native-wechat-lib' {
   }
 
   export function chooseInvoice(
-    data: ChooseInvoice,
+    data?: ChooseInvoice,
   ): Promise<{ errCode?: number; errStr?: string; cards: Invoice[] }>;
 }
