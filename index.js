@@ -1,7 +1,7 @@
 'use strict';
 
-import { EventEmitter } from 'events';
 import { DeviceEventEmitter, NativeModules, Platform } from 'react-native';
+import { EventEmitter } from 'events';
 
 let isAppRegistered = false;
 const { WeChat } = NativeModules;
@@ -9,11 +9,11 @@ const { WeChat } = NativeModules;
 // Event emitter to dispatch request and response from WeChat.
 const emitter = new EventEmitter();
 
-DeviceEventEmitter.addListener('WeChat_Resp', resp => {
+DeviceEventEmitter.addListener('WeChat_Resp', (resp) => {
   emitter.emit(resp.type, resp);
 });
 
-DeviceEventEmitter.addListener('WeChat_Req', resp => {
+DeviceEventEmitter.addListener('WeChat_Req', (resp) => {
   emitter.emit(resp.type, resp);
 });
 
@@ -25,12 +25,12 @@ function wrapRegisterApp(nativeFunc) {
     if (isAppRegistered) {
       return Promise.resolve(true);
     }
+    isAppRegistered = true;
     return new Promise((resolve, reject) => {
       nativeFunc.apply(null, [
         ...args,
         (error, result) => {
           if (!error) {
-            isAppRegistered = true;
             return resolve(result);
           }
           if (typeof error === 'string') {
@@ -158,6 +158,7 @@ const nativeShareWebpage = wrapApi(WeChat.shareWebpage);
 const nativeShareMiniProgram = wrapApi(WeChat.shareMiniProgram);
 const nativeSubscribeMessage = wrapApi(WeChat.subscribeMessage);
 
+const nativeChooseInvoice = wrapApi(WeChat.chooseInvoice);
 
 /**
  * @method sendAuthRequest
@@ -167,7 +168,7 @@ const nativeSubscribeMessage = wrapApi(WeChat.subscribeMessage);
 export function sendAuthRequest(scopes, state) {
   return new Promise((resolve, reject) => {
     WeChat.sendAuthRequest(scopes, state, () => {});
-    emitter.once('SendAuth.Resp', resp => {
+    emitter.once('SendAuth.Resp', (resp) => {
       if (resp.errCode === 0) {
         resolve(resp);
       } else {
@@ -184,11 +185,29 @@ export function sendAuthRequest(scopes, state) {
  */
 export function shareText(data) {
   if (data && data.scene == null) {
-    data.scene = 0
+    data.scene = 0;
   }
   return new Promise((resolve, reject) => {
     nativeShareText(data);
-    emitter.once('SendMessageToWX.Resp', resp => {
+    emitter.once('SendMessageToWX.Resp', (resp) => {
+      if (resp.errCode === 0) {
+        resolve(resp);
+      } else {
+        reject(new WechatError(resp));
+      }
+    });
+  });
+}
+
+/**
+ * Choose Invoice
+ * @method chooseInvoice
+ * @param {Object} data
+ */
+export function chooseInvoice(data) {
+  return new Promise((resolve, reject) => {
+    nativeChooseInvoice(data);
+    emitter.once('WXChooseInvoiceResp.Resp', (resp) => {
       if (resp.errCode === 0) {
         resolve(resp);
       } else {
@@ -205,11 +224,11 @@ export function shareText(data) {
  */
 export function shareImage(data) {
   if (data && data.scene == null) {
-    data.scene = 0
+    data.scene = 0;
   }
   return new Promise((resolve, reject) => {
     nativeShareImage(data);
-    emitter.once('SendMessageToWX.Resp', resp => {
+    emitter.once('SendMessageToWX.Resp', (resp) => {
       if (resp.errCode === 0) {
         resolve(resp);
       } else {
@@ -226,11 +245,11 @@ export function shareImage(data) {
  */
 export function shareLocalImage(data) {
   if (data && data.scene == null) {
-    data.scene = 0
+    data.scene = 0;
   }
   return new Promise((resolve, reject) => {
     nativeShareLocalImage(data);
-    emitter.once('SendMessageToWX.Resp', resp => {
+    emitter.once('SendMessageToWX.Resp', (resp) => {
       if (resp.errCode === 0) {
         resolve(resp);
       } else {
@@ -247,11 +266,11 @@ export function shareLocalImage(data) {
  */
 export function shareMusic(data) {
   if (data && data.scene == null) {
-    data.scene = 0
+    data.scene = 0;
   }
   return new Promise((resolve, reject) => {
     nativeShareMusic(data);
-    emitter.once('SendMessageToWX.Resp', resp => {
+    emitter.once('SendMessageToWX.Resp', (resp) => {
       if (resp.errCode === 0) {
         resolve(resp);
       } else {
@@ -268,11 +287,11 @@ export function shareMusic(data) {
  */
 export function shareVideo(data) {
   if (data && data.scene == null) {
-    data.scene = 0
+    data.scene = 0;
   }
   return new Promise((resolve, reject) => {
     nativeShareVideo(data);
-    emitter.once('SendMessageToWX.Resp', resp => {
+    emitter.once('SendMessageToWX.Resp', (resp) => {
       if (resp.errCode === 0) {
         resolve(resp);
       } else {
@@ -289,11 +308,11 @@ export function shareVideo(data) {
  */
 export function shareWebpage(data) {
   if (data && data.scene == null) {
-    data.scene = 0
+    data.scene = 0;
   }
   return new Promise((resolve, reject) => {
     nativeShareWebpage(data);
-    emitter.once('SendMessageToWX.Resp', resp => {
+    emitter.once('SendMessageToWX.Resp', (resp) => {
       if (resp.errCode === 0) {
         resolve(resp);
       } else {
@@ -309,14 +328,14 @@ export function shareWebpage(data) {
  */
 export function shareMiniProgram(data) {
   if (data && data.scene == null) {
-    data.scene = 0
+    data.scene = 0;
   }
   if (data && data.miniProgramType == null) {
-    data.miniProgramType = 0
+    data.miniProgramType = 0;
   }
   return new Promise((resolve, reject) => {
     nativeShareMiniProgram(data);
-    emitter.once('SendMessageToWX.Resp', resp => {
+    emitter.once('SendMessageToWX.Resp', (resp) => {
       if (resp.errCode === 0) {
         resolve(resp);
       } else {
@@ -334,20 +353,25 @@ export function shareMiniProgram(data) {
  * @param {Integer} miniProgramType - 拉起小程序的类型. 0-正式版 1-开发版 2-体验版
  * @param {String} path - 拉起小程序页面的可带参路径，不填默认拉起小程序首页
  */
-export function launchMiniProgram({userName, miniProgramType = 0, path = ''}) {
+export function launchMiniProgram({ userName, miniProgramType = 0, path = '' }) {
   return new Promise((resolve, reject) => {
-      if (miniProgramType !== 0 && miniProgramType !== 1 && miniProgramType !== 2) {
-          reject(new WechatError({errStr: '拉起小程序的类型不对，0-正式版 1-开发版 2-体验版', errCode: -1}))
-          return
+    if (miniProgramType !== 0 && miniProgramType !== 1 && miniProgramType !== 2) {
+      reject(
+        new WechatError({
+          errStr: '拉起小程序的类型不对，0-正式版 1-开发版 2-体验版',
+          errCode: -1,
+        }),
+      );
+      return;
+    }
+    nativeLaunchMiniProgram({ userName, miniProgramType, path });
+    emitter.once('WXLaunchMiniProgramReq.Resp', (resp) => {
+      if (resp.errCode === 0) {
+        resolve(resp);
+      } else {
+        reject(new WechatError(resp));
       }
-      nativeLaunchMiniProgram({userName, miniProgramType, path});
-      emitter.once('WXLaunchMiniProgramReq.Resp', resp => {
-          if (resp.errCode === 0) {
-              resolve(resp);
-          } else {
-              reject(new WechatError(resp));
-          }
-      });
+    });
   });
 }
 
@@ -358,11 +382,11 @@ export function launchMiniProgram({userName, miniProgramType = 0, path = ''}) {
  */
 export function subscribeMessage(data) {
   if (data && data.scene == null) {
-    data.scene = 0
+    data.scene = 0;
   }
   return new Promise((resolve, reject) => {
     nativeSubscribeMessage(data);
-    emitter.once('WXSubscribeMsgReq.Resp', resp => {
+    emitter.once('WXSubscribeMsgReq.Resp', (resp) => {
       if (resp.errCode === 0) {
         resolve(resp);
       } else {
@@ -388,7 +412,7 @@ export function subscribeMessage(data) {
 export function shareToFavorite(data) {
   return new Promise((resolve, reject) => {
     nativeShareToFavorite(data);
-    emitter.once('SendMessageToWX.Resp', resp => {
+    emitter.once('SendMessageToWX.Resp', (resp) => {
       if (resp.errCode === 0) {
         resolve(resp);
       } else {
@@ -420,16 +444,16 @@ export function pay(data) {
   correct('noncestr', 'nonceStr');
   correct('partnerid', 'partnerId');
   correct('timestamp', 'timeStamp');
-  
+
   // FIXME(94cstyles)
   // Android requires the type of the timeStamp field to be a string
-  if (Platform.OS === 'android') data.timeStamp = String(data.timeStamp)
+  if (Platform.OS === 'android') data.timeStamp = String(data.timeStamp);
 
   return new Promise((resolve, reject) => {
-    WeChat.pay(data, result => {
+    WeChat.pay(data, (result) => {
       if (result) reject(result);
     });
-    emitter.once('PayReq.Resp', resp => {
+    emitter.once('PayReq.Resp', (resp) => {
       if (resp.errCode === 0) {
         resolve(resp);
       } else {
@@ -458,4 +482,3 @@ export class WechatError extends Error {
     }
   }
 }
-
