@@ -153,6 +153,7 @@ declare module 'react-native-wechat-lib' {
   }
 
   export interface Invoice {
+    appId: string;
     cardId: string;
     encryptCode: string;
   }

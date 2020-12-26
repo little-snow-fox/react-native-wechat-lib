@@ -607,7 +607,7 @@ RCT_EXPORT_METHOD(pay:(NSDictionary *)data
         body[@"errStr"] = r.errStr;
         NSMutableArray *arr = [[NSMutableArray alloc] init];
         for (WXCardItem* cardItem in r.cardAry) {
-            NSMutableDictionary *item = @{@"cardId":cardItem.cardId,@"encryptCode":cardItem.encryptCode}.mutableCopy;
+            NSMutableDictionary *item = @{@"cardId":cardItem.cardId,@"encryptCode":cardItem.encryptCode,@"appId":cardItem.appID}.mutableCopy;
             [arr addObject:item];
         }
         body[@"cards"] = arr;
