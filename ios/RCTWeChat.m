@@ -260,6 +260,33 @@ RCT_EXPORT_METHOD(chooseInvoice:(NSDictionary *)data
     [WXApi sendReq:req completion:completion];
 }
 
+// 分享文件
+RCT_EXPORT_METHOD(shareFile:(NSDictionary *)data
+                  :(RCTResponseSenderBlock)callback)
+{
+    NSString *url = data[@"url"];
+    WXFileObject *file =  [[WXFileObject alloc] init];
+    file.fileExtension = data[@"ext"];
+    NSData *fileData = [NSData dataWithContentsOfURL:[NSURL URLWithString: url]];
+    file.fileData = fileData;
+    
+    WXMediaMessage *message = [WXMediaMessage message];
+    message.title = data[@"title"];
+    message.mediaObject = file;
+    
+    SendMessageToWXReq *req = [[SendMessageToWXReq alloc] init];
+    req.bText = NO;
+    req.message = message;
+    req.scene = [data[@"scene"] integerValue];
+    void ( ^ completion )( BOOL );
+    completion = ^( BOOL success )
+    {
+        callback(@[success ? [NSNull null] : INVOKE_FAILED]);
+        return;
+    };
+    [WXApi sendReq:req completion:completion];
+}
+
 // 分享图片
 RCT_EXPORT_METHOD(shareImage:(NSDictionary *)data
                   :(RCTResponseSenderBlock)callback)

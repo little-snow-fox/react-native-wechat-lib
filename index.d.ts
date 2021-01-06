@@ -161,4 +161,14 @@ declare module 'react-native-wechat-lib' {
   export function chooseInvoice(
     data?: ChooseInvoice,
   ): Promise<{ errCode?: number; errStr?: string; cards: Invoice[] }>;
+
+  export interface ShareFileMetadata {
+    url: string;
+    title?: string;
+    ext?: string;
+    scene?: WXScene;
+  }
+  export function shareFile(
+    data: ShareFileMetadata,
+  ): Promise<{ errCode?: number; errStr?: string }>;
 }

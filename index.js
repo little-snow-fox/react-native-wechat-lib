@@ -159,6 +159,7 @@ const nativeShareMiniProgram = wrapApi(WeChat.shareMiniProgram);
 const nativeSubscribeMessage = wrapApi(WeChat.subscribeMessage);
 
 const nativeChooseInvoice = wrapApi(WeChat.chooseInvoice);
+const nativeShareFile = wrapApi(WeChat.shareFile);
 
 /**
  * @method sendAuthRequest
@@ -208,6 +209,24 @@ export function chooseInvoice(data) {
   return new Promise((resolve, reject) => {
     nativeChooseInvoice(data);
     emitter.once('WXChooseInvoiceResp.Resp', (resp) => {
+      if (resp.errCode === 0) {
+        resolve(resp);
+      } else {
+        reject(new WechatError(resp));
+      }
+    });
+  });
+}
+
+/**
+ * Share File
+ * @method shareFile
+ * @param {Object} data
+ */
+export function shareFile(data) {
+  return new Promise((resolve, reject) => {
+    nativeShareFile(data);
+    emitter.once('SendMessageToWX.Resp', (resp) => {
       if (resp.errCode === 0) {
         resolve(resp);
       } else {
