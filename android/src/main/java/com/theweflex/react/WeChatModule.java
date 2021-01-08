@@ -31,6 +31,7 @@ import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.modules.core.DeviceEventManagerModule;
 import com.tencent.mm.opensdk.modelbase.BaseReq;
 import com.tencent.mm.opensdk.modelbase.BaseResp;
+import com.tencent.mm.opensdk.modelbiz.ChooseCardFromWXCardPackage;
 import com.tencent.mm.opensdk.modelmsg.SendAuth;
 import com.tencent.mm.opensdk.modelmsg.SendMessageToWX;
 import com.tencent.mm.opensdk.modelmsg.ShowMessageFromWX;
@@ -198,7 +199,28 @@ public class WeChatModule extends ReactContextBaseJavaModule implements IWXAPIEv
     }
 
     /**
+     * 选择发票
+     *
+     * @param data
+     * @param callback
+     */
+    @ReactMethod
+    public void chooseInvoice(ReadableMap data, Callback callback) {
+        ChooseCardFromWXCardPackage.Req req = new ChooseCardFromWXCardPackage.Req();
+
+        req.appId = this.appId;
+        req.cardType = "INVOICE";
+        req.timeStamp = String.valueOf(data.getInt("timeStamp"));
+        req.nonceStr = data.getString("nonceStr");
+        req.cardSign = data.getString("cardSign");
+        req.signType = data.getString("signType");
+
+        callback.invoke(null, api.sendReq(req));
+    }
+
+    /**
      * 分享文本
+     *
      * @param data
      * @param callback
      */
@@ -222,6 +244,7 @@ public class WeChatModule extends ReactContextBaseJavaModule implements IWXAPIEv
 
     /**
      * 分享图片
+     *
      * @param data
      * @param callback
      */
@@ -255,8 +278,10 @@ public class WeChatModule extends ReactContextBaseJavaModule implements IWXAPIEv
 
     }
     // private static final String SDCARD_ROOT = Environment.getExternalStorageDirectory().getAbsolutePath();
+
     /**
      * 分享本地图片
+     *
      * @param data
      * @param callback
      */
@@ -270,7 +295,7 @@ public class WeChatModule extends ReactContextBaseJavaModule implements IWXAPIEv
             }
 //            int maxWidth = data.hasKey("maxWidth") ? data.getInt("maxWidth") : -1;
             fs = new FileInputStream(path);
-            Bitmap bmp  = BitmapFactory.decodeStream(fs);
+            Bitmap bmp = BitmapFactory.decodeStream(fs);
 
 //            if (maxWidth > 0) {
 //                bmp = Bitmap.createScaledBitmap(bmp, maxWidth, bmp.getHeight() / bmp.getWidth() * maxWidth, true);
@@ -318,6 +343,7 @@ public class WeChatModule extends ReactContextBaseJavaModule implements IWXAPIEv
 
     /**
      * 分享音乐
+     *
      * @param data
      * @param callback
      */
@@ -365,6 +391,7 @@ public class WeChatModule extends ReactContextBaseJavaModule implements IWXAPIEv
 
     /**
      * 分享视频
+     *
      * @param data
      * @param callback
      */
@@ -407,6 +434,7 @@ public class WeChatModule extends ReactContextBaseJavaModule implements IWXAPIEv
 
     /**
      * 分享网页
+     *
      * @param data
      * @param callback
      */
@@ -449,6 +477,7 @@ public class WeChatModule extends ReactContextBaseJavaModule implements IWXAPIEv
 
     /**
      * 分享小程序
+     *
      * @param data
      * @param callback
      */
@@ -525,6 +554,7 @@ public class WeChatModule extends ReactContextBaseJavaModule implements IWXAPIEv
 
     /**
      * 一次性订阅消息
+     *
      * @param data
      * @param callback
      */
@@ -895,6 +925,10 @@ public class WeChatModule extends ReactContextBaseJavaModule implements IWXAPIEv
             map.putString("type", "WXLaunchMiniProgramReq.Resp");
             map.putString("extraData", extraData);
             map.putString("extMsg", extraData);
+        } else if (baseResp instanceof ChooseCardFromWXCardPackage.Resp) {
+            ChooseCardFromWXCardPackage.Resp resp = (ChooseCardFromWXCardPackage.Resp) baseResp;
+            map.putString("type", "WXChooseInvoiceResp.Resp");
+            map.putString("cardItemList", resp.cardItemList);
         }
 
         this.getReactApplicationContext()

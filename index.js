@@ -205,11 +205,18 @@ export function shareText(data) {
  * @method chooseInvoice
  * @param {Object} data
  */
-export function chooseInvoice(data) {
+export function chooseInvoice(data = {}) {
   return new Promise((resolve, reject) => {
     nativeChooseInvoice(data);
     emitter.once('WXChooseInvoiceResp.Resp', (resp) => {
       if (resp.errCode === 0) {
+        if (Platform.OS === 'android') {
+          const cardItemList = JSON.parse(resp.cardItemList);
+          resp.cards = cardItemList.map((item) => ({
+            cardId: item.card_id,
+            encryptCode: item.encrypt_code,
+          }));
+        }
         resolve(resp);
       } else {
         reject(new WechatError(resp));
