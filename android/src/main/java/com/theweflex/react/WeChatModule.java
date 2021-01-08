@@ -52,6 +52,7 @@ import com.tencent.mm.opensdk.openapi.WXAPIFactory;
 import com.tencent.mm.opensdk.constants.ConstantsAPI;
 import com.tencent.mm.opensdk.modelbiz.SubscribeMessage;
 
+import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -59,7 +60,10 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
 import java.net.URI;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.UUID;
 
@@ -215,6 +219,61 @@ public class WeChatModule extends ReactContextBaseJavaModule implements IWXAPIEv
         req.cardSign = data.getString("cardSign");
         req.signType = data.getString("signType");
 
+        callback.invoke(null, api.sendReq(req));
+    }
+
+    public byte[] loadRawDataFromURL(String u) throws Exception {
+        URL url = new URL(u);
+        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+
+        InputStream is = conn.getInputStream();
+        BufferedInputStream bis = new BufferedInputStream(is);
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+
+        final int BUFFER_SIZE = 2048;
+        final int EOF = -1;
+
+        int c;
+        byte[] buf = new byte[BUFFER_SIZE];
+
+        while (true) {
+            c = bis.read(buf);
+            if (c == EOF)
+                break;
+
+            baos.write(buf, 0, c);
+        }
+
+        conn.disconnect();
+        is.close();
+
+        byte[] data = baos.toByteArray();
+        baos.flush();
+
+        return data;
+    }
+
+
+    /**
+     * 分享文本
+     *
+     * @param data
+     * @param callback
+     */
+    @ReactMethod
+    public void shareFile(ReadableMap data, Callback callback) throws Exception {
+        WXFileObject fileObj = new WXFileObject();
+        fileObj.fileData = loadRawDataFromURL(data.getString("url"));
+
+        WXMediaMessage msg = new WXMediaMessage();
+        msg.mediaObject = fileObj;
+        msg.title = data.getString("title");
+
+        SendMessageToWX.Req req = new SendMessageToWX.Req();
+        req.transaction = String.valueOf(System.currentTimeMillis());
+        req.message = msg;
+        req.scene = data.hasKey("scene") ? data.getInt("scene") : SendMessageToWX.Req.WXSceneSession;
         callback.invoke(null, api.sendReq(req));
     }
 
