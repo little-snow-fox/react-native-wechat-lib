@@ -5,12 +5,10 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
-import android.os.Environment;
 
 import androidx.annotation.Nullable;
 
 import com.facebook.common.executors.UiThreadImmediateExecutorService;
-import com.facebook.common.internal.Files;
 import com.facebook.common.references.CloseableReference;
 import com.facebook.common.util.UriUtil;
 import com.facebook.datasource.DataSource;
@@ -29,8 +27,11 @@ import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.modules.core.DeviceEventManagerModule;
+import com.tencent.mm.opensdk.constants.ConstantsAPI;
 import com.tencent.mm.opensdk.modelbase.BaseReq;
 import com.tencent.mm.opensdk.modelbase.BaseResp;
+import com.tencent.mm.opensdk.modelbiz.SubscribeMessage;
+import com.tencent.mm.opensdk.modelbiz.WXLaunchMiniProgram;
 import com.tencent.mm.opensdk.modelmsg.SendAuth;
 import com.tencent.mm.opensdk.modelmsg.SendMessageToWX;
 import com.tencent.mm.opensdk.modelmsg.ShowMessageFromWX;
@@ -44,21 +45,13 @@ import com.tencent.mm.opensdk.modelmsg.WXVideoObject;
 import com.tencent.mm.opensdk.modelmsg.WXWebpageObject;
 import com.tencent.mm.opensdk.modelpay.PayReq;
 import com.tencent.mm.opensdk.modelpay.PayResp;
-import com.tencent.mm.opensdk.modelbiz.WXLaunchMiniProgram;
 import com.tencent.mm.opensdk.openapi.IWXAPI;
 import com.tencent.mm.opensdk.openapi.IWXAPIEventHandler;
 import com.tencent.mm.opensdk.openapi.WXAPIFactory;
-import com.tencent.mm.opensdk.constants.ConstantsAPI;
-import com.tencent.mm.opensdk.modelbiz.SubscribeMessage;
 
-import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.net.URI;
 import java.util.ArrayList;
 import java.util.UUID;
 
@@ -92,7 +85,8 @@ public class WeChatModule extends ReactContextBaseJavaModule implements IWXAPIEv
             if (options > 10) {
                 options -= 8;
             } else {
-                return bitmapResizeGetBytes(Bitmap.createScaledBitmap(image, 280, image.getHeight() / image.getWidth() * 280, true), size);
+                float height = (float) image.getHeight() / image.getWidth() * 280;
+                return bitmapResizeGetBytes(Bitmap.createScaledBitmap(image, 280,  (int) height , true), size);
             }
             // 这里压缩options%，把压缩后的数据存放到baos中
             image.compress(Bitmap.CompressFormat.JPEG, options, baos);
@@ -262,47 +256,35 @@ public class WeChatModule extends ReactContextBaseJavaModule implements IWXAPIEv
      */
     @ReactMethod
     public void shareLocalImage(final ReadableMap data, final Callback callback) {
-        FileInputStream fs = null;
         try {
             String path = data.getString("imageUrl");
-            if (path.indexOf("file://") > -1) {
+
+            Bitmap originalBitmap = null;
+            if (path.startsWith("file://")) {
                 path = path.substring(7);
+                FileInputStream fs = new FileInputStream(path);
+                originalBitmap  = BitmapFactory.decodeStream(fs);
+            } else {
+                originalBitmap  = BitmapFactory.decodeStream(getReactApplicationContext().getContentResolver().openInputStream(Uri.parse(path)));
             }
-//            int maxWidth = data.hasKey("maxWidth") ? data.getInt("maxWidth") : -1;
-            fs = new FileInputStream(path);
-            Bitmap bmp  = BitmapFactory.decodeStream(fs);
 
-//            if (maxWidth > 0) {
-//                bmp = Bitmap.createScaledBitmap(bmp, maxWidth, bmp.getHeight() / bmp.getWidth() * maxWidth, true);
-//            }
+            float maxWidth = 1500;
+            float maxHeight = 3000;
+            float originalBitmapWidth = originalBitmap.getWidth();
+            float originalBitmapHeight = originalBitmap.getHeight();
 
-//            File f = Environment.getExternalStoragePublicDirectory(SDCARD_ROOT + "/react-native-wechat-lib");
-//            String fileName = "wechat-share.jpg";
-//            String tempPath = SDCARD_ROOT + "/react-native-wechat-lib";
-//            File file = new File(f, fileName);
-//            try {
-//                FileOutputStream fos = new FileOutputStream(file);
-//                bmp.compress(Bitmap.CompressFormat.JPEG, 100, fos);
-//                fos.flush();
-//                fos.close();
-//            } catch (FileNotFoundException e) {
-//                e.printStackTrace();
-//            } catch (IOException e) {
-//                e.printStackTrace();
-//            }
-
-//            int size = bmp.getByteCount();
-//            ByteArrayOutputStream var2 = new ByteArrayOutputStream();
-//            bmp.compress(Bitmap.CompressFormat.JPEG, 85, var2);
-//            int size2 = var2.toByteArray().length;
-            // 初始化 WXImageObject 和 WXMediaMessage 对象
-
-            WXImageObject imgObj = new WXImageObject(bmp);
+            float currentWidth = originalBitmapWidth > maxWidth ? maxWidth : originalBitmapWidth;
+            float currentHeight = currentWidth / (originalBitmapWidth /  originalBitmapHeight);
             WXMediaMessage msg = new WXMediaMessage();
+
+            Bitmap imageBitmap = Bitmap.createScaledBitmap(originalBitmap, (int) currentWidth, (int) (currentHeight > maxHeight ? maxHeight : currentHeight), false);
+
+            WXImageObject imgObj = new WXImageObject(imageBitmap);
+
             msg.mediaObject = imgObj;
-            // 设置缩略图
-            msg.thumbData = bitmapResizeGetBytes(bmp, THUMB_SIZE);
-            bmp.recycle();
+          // 设置缩略图
+            msg.thumbData =  bitmapResizeGetBytes(imageBitmap, THUMB_SIZE);
+
             // 构造一个Req
             SendMessageToWX.Req req = new SendMessageToWX.Req();
             req.transaction = "img";
@@ -477,7 +459,8 @@ public class WeChatModule extends ReactContextBaseJavaModule implements IWXAPIEv
                 public void invoke(@Nullable Bitmap bmp) {
                     // 小程序消息封面图片，小于128k
                     if (bmp != null) {
-                        msg.thumbData = bitmapResizeGetBytes(bmp, 128);
+                        // 设置size为128有时候微信会报错图片太大, 无法成功分享, 故设为100
+                        msg.thumbData = bitmapResizeGetBytes(bmp, 100);
                     }
                     // 构造一个Req
                     SendMessageToWX.Req req = new SendMessageToWX.Req();
