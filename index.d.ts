@@ -2,13 +2,13 @@
  *
  */
 enum WXScene {
-  WXSceneSession          = 0,   /**< 聊天界面    */
-  WXSceneTimeline         = 1,   /**< 朋友圈     */
-  WXSceneFavorite         = 2,   /**< 收藏       */
-  WXSceneSpecifiedSession = 3,   /**< 指定联系人  */
-};
+  WXSceneSession = 0 /**< 聊天界面    */,
+  WXSceneTimeline = 1 /**< 朋友圈     */,
+  WXSceneFavorite = 2 /**< 收藏       */,
+  WXSceneSpecifiedSession = 3 /**< 指定联系人  */,
+}
 
-declare module "react-native-wechat-lib" {
+declare module 'react-native-wechat-lib' {
   export function registerApp(appId: string, universalLink?: string): Promise<boolean>;
   export function isWXAppInstalled(): Promise<boolean>;
   export function isWXAppSupportApi(): Promise<boolean>;
@@ -24,35 +24,24 @@ declare module "react-native-wechat-lib" {
     country?: string;
   }
   export interface WeChatReq {
-    type?: string,
-    errStr?: string,
-    extMsg?: string,
-    country?: string,
-    state?: string,
-    returnKey?: string
+    type?: string;
+    errStr?: string;
+    extMsg?: string;
+    country?: string;
+    state?: string;
+    returnKey?: string;
   }
   export interface WeChatResp {
-    type?: string,
-    errStr?: string,
-    extMsg?: string,
-    country?: string,
-    state?: string,
-    returnKey?: string
+    type?: string;
+    errStr?: string;
+    extMsg?: string;
+    country?: string;
+    state?: string;
+    returnKey?: string;
   }
-  export function sendAuthRequest(
-    scope: string | string[],
-    state?: string
-  ): Promise<AuthResponse>;
+  export function sendAuthRequest(scope: string | string[], state?: string): Promise<AuthResponse>;
   export interface ShareMetadata {
-    type:
-      | "news"
-      | "text"
-      | "imageUrl"
-      | "imageFile"
-      | "imageResource"
-      | "video"
-      | "audio"
-      | "file";
+    type: 'news' | 'text' | 'imageUrl' | 'imageFile' | 'imageResource' | 'video' | 'audio' | 'file';
     thumbImage?: string;
     description?: string;
     webpageUrl?: string;
@@ -63,88 +52,88 @@ declare module "react-native-wechat-lib" {
     fileExtension?: string;
   }
   export interface ShareTextMetadata {
-    text: string,
-    scene?: WXScene
+    text: string;
+    scene?: WXScene;
   }
   export interface ShareImageMetadata {
-    imageUrl: string,
-    scene?: WXScene
+    imageUrl: string;
+    scene?: WXScene;
   }
   export interface ShareMusicMetadata {
-    musicUrl: string,
-    musicLowBandUrl?: string,
-    musicDataUrl?: string,
-    musicLowBandDataUrl?: string,
-    title?: string,
-    description?: string,
-    thumbImageUrl?: string,
-    scene?: WXScene
+    musicUrl: string;
+    musicLowBandUrl?: string;
+    musicDataUrl?: string;
+    musicLowBandDataUrl?: string;
+    title?: string;
+    description?: string;
+    thumbImageUrl?: string;
+    scene?: WXScene;
   }
   export interface ShareVideoMetadata {
-    videoUrl: string,
-    videoLowBandUrl?: string,
-    title?: string,
-    description?: string,
-    thumbImageUrl?: string,
-    scene?: WXScene
+    videoUrl: string;
+    videoLowBandUrl?: string;
+    title?: string;
+    description?: string;
+    thumbImageUrl?: string;
+    scene?: WXScene;
   }
   export interface ShareWebpageMetadata {
-    webpageUrl: string,
-    title?: string,
-    description?: string,
-    thumbImageUrl?: string,
-    scene?: WXScene
+    webpageUrl: string;
+    title?: string;
+    description?: string;
+    thumbImageUrl?: string;
+    scene?: WXScene;
   }
   export interface ShareMiniProgramMetadata {
-    webpageUrl: string,
-    userName: string,
-    path?: string,
-    hdImageUrl?: string,
-    withShareTicket?: string,
-    miniProgramType?: number,
-    title?: string,
-    description?: string,
-    thumbImageUrl?: string,
-    scene?: WXScene
+    webpageUrl: string;
+    userName: string;
+    path?: string;
+    hdImageUrl?: string;
+    withShareTicket?: string;
+    miniProgramType?: number;
+    title?: string;
+    description?: string;
+    thumbImageUrl?: string;
+    scene?: WXScene;
   }
   export interface LaunchMiniProgramMetadata {
-    userName: string,
-    miniProgramType?: number,
-    path?: string
+    userName: string;
+    miniProgramType?: number;
+    path?: string;
   }
 
   export interface SubscribeMessageMetadata {
-    scene?: WXScene,
-    templateId: string,
-    reserved?: string
+    scene?: WXScene;
+    templateId: string;
+    reserved?: string;
   }
 
   export function shareText(
-    message: ShareTextMetadata
+    message: ShareTextMetadata,
   ): Promise<{ errCode?: number; errStr?: string }>;
   export function shareImage(
-    message: ShareImageMetadata
+    message: ShareImageMetadata,
   ): Promise<{ errCode?: number; errStr?: string }>;
   export function shareLocalImage(
-    message: ShareImageMetadata
+    message: ShareImageMetadata,
   ): Promise<{ errCode?: number; errStr?: string }>;
   export function shareMusic(
-    message: ShareMusicMetadata
+    message: ShareMusicMetadata,
   ): Promise<{ errCode?: number; errStr?: string }>;
   export function shareVideo(
-    message: ShareVideoMetadata
+    message: ShareVideoMetadata,
   ): Promise<{ errCode?: number; errStr?: string }>;
   export function shareWebpage(
-    message: ShareWebpageMetadata
+    message: ShareWebpageMetadata,
   ): Promise<{ errCode?: number; errStr?: string }>;
   export function shareMiniProgram(
-    message: ShareMiniProgramMetadata
+    message: ShareMiniProgramMetadata,
   ): Promise<{ errCode?: number; errStr?: string }>;
   export function launchMiniProgram(
-    message: LaunchMiniProgramMetadata
+    message: LaunchMiniProgramMetadata,
   ): Promise<{ errCode?: number; errStr?: string }>;
   export function subscribeMessage(
-    message: SubscribeMessageMetadata
+    message: SubscribeMessageMetadata,
   ): Promise<{ errCode?: number; errStr?: string }>;
   export interface PaymentLoad {
     partnerId: string;
@@ -154,7 +143,32 @@ declare module "react-native-wechat-lib" {
     package: string;
     sign: string;
   }
-  export function pay(
-    payload: PaymentLoad
+  export function pay(payload: PaymentLoad): Promise<{ errCode?: number; errStr?: string }>;
+
+  export interface ChooseInvoice {
+    signType?: string;
+    nonceStr?: string;
+    timeStamp?: number;
+    cardSign?: string;
+  }
+
+  export interface Invoice {
+    appId: string;
+    cardId: string;
+    encryptCode: string;
+  }
+
+  export function chooseInvoice(
+    data: ChooseInvoice,
+  ): Promise<{ errCode?: number; errStr?: string; cards: Invoice[] }>;
+
+  export interface ShareFileMetadata {
+    url: string;
+    title?: string;
+    ext?: string;
+    scene?: WXScene;
+  }
+  export function shareFile(
+    data: ShareFileMetadata,
   ): Promise<{ errCode?: number; errStr?: string }>;
 }

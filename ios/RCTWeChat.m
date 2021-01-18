@@ -35,7 +35,7 @@ RCT_EXPORT_MODULE()
 {
     NSString * aURLString =  [aNotification userInfo][@"url"];
     NSURL * aURL = [NSURL URLWithString:aURLString];
-
+    
     if ([WXApi handleOpenURL:aURL delegate:self])
     {
         return YES;
@@ -67,7 +67,7 @@ RCT_EXPORT_MODULE()
     CGFloat compression = 1;
     NSData *data = UIImageJPEGRepresentation(image, compression);
     if (data.length < maxLength) return data;
-
+    
     CGFloat max = 1;
     CGFloat min = 0;
     for (int i = 0; i < 6; ++i) {
@@ -83,7 +83,7 @@ RCT_EXPORT_MODULE()
     }
     UIImage *resultImage = [UIImage imageWithData:data];
     if (data.length < maxLength) return data;
-
+    
     // Compress by size
     NSUInteger lastDataLength = 0;
     while (data.length > maxLength && data.length != lastDataLength) {
@@ -97,7 +97,7 @@ RCT_EXPORT_MODULE()
         UIGraphicsEndImageContext();
         data = UIImageJPEGRepresentation(resultImage, compression);
     }
-
+    
     if (data.length > maxLength) {
         return [self compressImage:resultImage toByte:maxLength];
     }
@@ -173,7 +173,7 @@ RCT_EXPORT_METHOD(sendAuthRequest:(NSString *)scope
         callback(@[success ? [NSNull null] : INVOKE_FAILED]);
         return;
     };
-     UIViewController *rootViewController = [UIApplication sharedApplication].keyWindow.rootViewController;
+    UIViewController *rootViewController = [UIApplication sharedApplication].keyWindow.rootViewController;
     [WXApi sendAuthReq:req viewController:rootViewController delegate:self completion:completion];
 }
 
@@ -240,6 +240,53 @@ RCT_EXPORT_METHOD(shareText:(NSDictionary *)data
     [WXApi sendReq:req completion:completion];
 }
 
+// 选择发票
+RCT_EXPORT_METHOD(chooseInvoice:(NSDictionary *)data
+                  :(RCTResponseSenderBlock)callback)
+{
+    WXChooseInvoiceReq *req = [[WXChooseInvoiceReq alloc] init];
+    req.appID = self.appId;
+    req.timeStamp = [data[@"timeStamp"] intValue];
+    req.nonceStr = data[@"nonceStr"];
+    req.cardSign = data[@"cardSign"];
+    req.signType = data[@"signType"];
+    
+    void ( ^ completion )( BOOL );
+    completion = ^( BOOL success )
+    {
+        callback(@[success ? [NSNull null] : INVOKE_FAILED]);
+        return;
+    };
+    [WXApi sendReq:req completion:completion];
+}
+
+// 分享文件
+RCT_EXPORT_METHOD(shareFile:(NSDictionary *)data
+                  :(RCTResponseSenderBlock)callback)
+{
+    NSString *url = data[@"url"];
+    WXFileObject *file =  [[WXFileObject alloc] init];
+    file.fileExtension = data[@"ext"];
+    NSData *fileData = [NSData dataWithContentsOfURL:[NSURL URLWithString: url]];
+    file.fileData = fileData;
+    
+    WXMediaMessage *message = [WXMediaMessage message];
+    message.title = data[@"title"];
+    message.mediaObject = file;
+    
+    SendMessageToWXReq *req = [[SendMessageToWXReq alloc] init];
+    req.bText = NO;
+    req.message = message;
+    req.scene = [data[@"scene"] integerValue];
+    void ( ^ completion )( BOOL );
+    completion = ^( BOOL success )
+    {
+        callback(@[success ? [NSNull null] : INVOKE_FAILED]);
+        return;
+    };
+    [WXApi sendReq:req completion:completion];
+}
+
 // 分享图片
 RCT_EXPORT_METHOD(shareImage:(NSDictionary *)data
                   :(RCTResponseSenderBlock)callback)
@@ -270,7 +317,7 @@ RCT_EXPORT_METHOD(shareImage:(NSDictionary *)data
     message.mediaObject = imageObject;
     message.title = data[@"title"];
     message.description = data[@"description"];
-
+    
     SendMessageToWXReq *req = [[SendMessageToWXReq alloc] init];
     req.bText = NO;
     req.message = message;
@@ -315,7 +362,7 @@ RCT_EXPORT_METHOD(shareLocalImage:(NSDictionary *)data
     message.mediaObject = imageObject;
     message.title = data[@"title"];
     message.description = data[@"description"];
-
+    
     SendMessageToWXReq *req = [[SendMessageToWXReq alloc] init];
     req.bText = NO;
     req.message = message;
@@ -339,7 +386,7 @@ RCT_EXPORT_METHOD(shareMusic:(NSDictionary *)data
     musicObject.musicLowBandUrl = data[@"musicLowBandUrl"];
     musicObject.musicDataUrl = data[@"musicDataUrl"];
     musicObject.musicLowBandDataUrl = data[@"musicLowBandDataUrl"];
-
+    
     WXMediaMessage *message = [WXMediaMessage message];
     message.title = data[@"title"];
     message.description = data[@"description"];
@@ -540,7 +587,7 @@ RCT_EXPORT_METHOD(pay:(NSDictionary *)data
     if([resp isKindOfClass:[SendMessageToWXResp class]])
     {
         SendMessageToWXResp *r = (SendMessageToWXResp *)resp;
-    
+        
         NSMutableDictionary *body = @{@"errCode":@(r.errCode)}.mutableCopy;
         body[@"errStr"] = r.errStr;
         body[@"lang"] = r.lang;
@@ -555,12 +602,12 @@ RCT_EXPORT_METHOD(pay:(NSDictionary *)data
         body[@"lang"] = r.lang;
         body[@"country"] =r.country;
         body[@"type"] = @"SendAuth.Resp";
-    
+        
         if (resp.errCode == WXSuccess) {
             if (self.appId && r) {
-            // ios第一次获取不到appid会卡死，加个判断OK
-            [body addEntriesFromDictionary:@{@"appid":self.appId, @"code":r.code}];
-            [self.bridge.eventDispatcher sendDeviceEventWithName:RCTWXEventName body:body];
+                // ios第一次获取不到appid会卡死，加个判断OK
+                [body addEntriesFromDictionary:@{@"appid":self.appId, @"code":r.code}];
+                [self.bridge.eventDispatcher sendDeviceEventWithName:RCTWXEventName body:body];
             }
         }
         else {
@@ -580,6 +627,18 @@ RCT_EXPORT_METHOD(pay:(NSDictionary *)data
         body[@"errStr"] = r.errStr;
         body[@"extMsg"] = r.extMsg;
         body[@"type"] = @"WXLaunchMiniProgramReq.Resp";
+        [self.bridge.eventDispatcher sendDeviceEventWithName:RCTWXEventName body:body];
+    } else if ([resp isKindOfClass:[WXChooseInvoiceResp class]]){
+        WXChooseInvoiceResp *r = (WXChooseInvoiceResp *)resp;
+        NSMutableDictionary *body = @{@"errCode":@(r.errCode)}.mutableCopy;
+        body[@"errStr"] = r.errStr;
+        NSMutableArray *arr = [[NSMutableArray alloc] init];
+        for (WXCardItem* cardItem in r.cardAry) {
+            NSMutableDictionary *item = @{@"cardId":cardItem.cardId,@"encryptCode":cardItem.encryptCode,@"appId":cardItem.appID}.mutableCopy;
+            [arr addObject:item];
+        }
+        body[@"cards"] = arr;
+        body[@"type"] = @"WXChooseInvoiceResp.Resp";
         [self.bridge.eventDispatcher sendDeviceEventWithName:RCTWXEventName body:body];
     }
 }
