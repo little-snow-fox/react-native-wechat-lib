@@ -268,16 +268,15 @@ public class WeChatModule extends ReactContextBaseJavaModule implements IWXAPIEv
                 originalBitmap  = BitmapFactory.decodeStream(getReactApplicationContext().getContentResolver().openInputStream(Uri.parse(path)));
             }
 
-            float maxWidth = 1500;
             float maxHeight = 3000;
             float originalBitmapWidth = originalBitmap.getWidth();
             float originalBitmapHeight = originalBitmap.getHeight();
 
-            float currentWidth = originalBitmapWidth > maxWidth ? maxWidth : originalBitmapWidth;
-            float currentHeight = currentWidth / (originalBitmapWidth /  originalBitmapHeight);
+            float currentHeight =  originalBitmapHeight > maxHeight ? maxHeight : originalBitmapHeight;
+            float currentWidth = currentHeight / originalBitmapHeight * originalBitmapWidth;
             WXMediaMessage msg = new WXMediaMessage();
 
-            Bitmap imageBitmap = Bitmap.createScaledBitmap(originalBitmap, (int) currentWidth, (int) (currentHeight > maxHeight ? maxHeight : currentHeight), false);
+            Bitmap imageBitmap = Bitmap.createScaledBitmap(originalBitmap, (int) currentWidth, (int) currentHeight, false);
 
             WXImageObject imgObj = new WXImageObject(imageBitmap);
 
