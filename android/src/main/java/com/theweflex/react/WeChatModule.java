@@ -97,7 +97,7 @@ public class WeChatModule extends ReactContextBaseJavaModule implements IWXAPIEv
             if (options > 10) {
                 options -= 8;
             } else {
-                return bitmapResizeGetBytes(Bitmap.createScaledBitmap(image, 280, image.getHeight() / image.getWidth() * 280, true), size);
+                return bitmapResizeGetBytes(Bitmap.createScaledBitmap(image, 280, image.getHeight() * 280 / image.getWidth(), true), size);
             }
             // 这里压缩options%，把压缩后的数据存放到baos中
             image.compress(Bitmap.CompressFormat.JPEG, options, baos);
