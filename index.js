@@ -212,12 +212,10 @@ export function chooseInvoice(data = {}) {
       if (resp.errCode === 0) {
         if (Platform.OS === 'android') {
           const cardItemList = JSON.parse(resp.cardItemList);
-          resp.cards = cardItemList
-            ? cardItemList.map((item) => ({
-                cardId: item.card_id,
-                encryptCode: item.encrypt_code,
-              }))
-            : [];
+          resp.cards = cardItemList.map((item) => ({
+            cardId: item.card_id,
+            encryptCode: item.encrypt_code,
+          }));
         }
         resolve(resp);
       } else {

@@ -351,7 +351,7 @@ WeChat.launchMiniProgram({
 });
 ```
 
-#### ChooseInvoice (ChooseInvoice) 选择发票
+#### ChooseInvoice (ChooseInvoice) 跳到小程序
 
 ChooseInvoice
 
