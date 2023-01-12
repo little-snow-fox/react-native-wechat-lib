@@ -1,4 +1,4 @@
-<img height="200" src="./weixin.png?raw=true">
+<img height="200" src="./image/weixin.png?raw=true">
 
 # React-Native-Wechat-Lib
 ![npm version](https://img.shields.io/badge/npm-v1.1.24-blue)
@@ -18,16 +18,16 @@
 
 ## 路线图
 - 3.0.0
-  - [√] React native 70
-  - [√] Android SDK 6.8.20
-  - [X] iOS SDK 2.0
-  - [X] iOS SDK 2.0 No payment function
-  - [√] Example
+  - [X] React native 70
+  - [X] Android SDK 6.8.20
+  - [] iOS SDK 2.0
+  - [] iOS SDK 2.0 No payment function
+  - [X] Example
 - 1.1.x
-  - [√] React native 60
-  - [√] Android SDK 5.5.6
-  - [√] iOS SDK 1.8.7.1
-  - [√] iOS SDK 1.8.7.1 No payment function
+  - [X] React native 60
+  - [X] Android SDK 5.5.6
+  - [X] iOS SDK 1.8.7.1
+  - [X] iOS SDK 1.8.7.1 No payment function
 
 <br>
 <br>
