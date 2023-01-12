@@ -1,6 +1,7 @@
 <img height="200" src="./image/weixin.png?raw=true">
 
 # React-Native-Wechat-Lib
+![Version](https://img.shields.io/badge/Version-V3.0.0-brightgreen)
 ![npm version](https://img.shields.io/badge/npm-v1.1.24-blue)
 ![Wechat SDK](https://img.shields.io/badge/WechatSDKAndroid-V6.8.20-brightgreen)
 ![Wechat SDK](https://img.shields.io/badge/WechatSDKIos-V2.0-brightgreen)
