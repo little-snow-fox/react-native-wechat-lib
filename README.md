@@ -34,7 +34,7 @@
 ## 注意
 如果你的 IOS 应用需要使用**不带支付功能**的 WeChat SDK，请使用带有 “-notpay” 后缀的 NPM 包。
 
-目前最新代码版本为 3.0.0，但 NPM Last 版本暂时只到 1.1.24，因为 **3.0.0 暂时还处于开发阶段**，很多功能**未经过测试**。
+目前最新代码版本为 3.0.0，但 NPM Last 版本暂时只到 1.1.26，因为 **3.0.0 暂时还处于开发阶段**，很多功能**未经过测试**。
 
 如果你需要使用 3.0.0 版本，请在 package.json 中加上版本号 react-native-wechat-lib@3.0.0，切换前请你清楚了解该版本的风险，该版本为开发版。
 
@@ -43,7 +43,7 @@
 <br>
 
 ## 附言
-本库由 [little-snow-fox](https://github.com/little-snow-fox/react-native-wechat-lib) 发起。
+本库由 [little-snow-fox](https://github.com/little-snow-fox) 发起。
 
 希望各位大佬积极提交 PR，单靠我一个人维护工作量大。
 
@@ -73,7 +73,15 @@ npm link
 cd ../my-project
 npm link react-native-wechat-lib
 ```
-
+源码安装指定版本
+```sh
+git clone https://github.com/little-snow-fox/react-native-wechat-lib
+cd react-native-wechat-lib
+git checkout 1.1.x
+npm link
+cd ../my-project
+npm link react-native-wechat-lib
+```
 <br>
 
 ## 起步
