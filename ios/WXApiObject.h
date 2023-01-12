@@ -33,6 +33,7 @@ enum WXScene {
     WXSceneTimeline         = 1,   /**< 朋友圈     */
     WXSceneFavorite         = 2,   /**< 收藏       */
     WXSceneSpecifiedSession = 3,   /**< 指定联系人  */
+    WXSceneState            = 4,   /**< 状态  */
 };
 
 
@@ -247,6 +248,23 @@ typedef void(^WXCheckULCompletion)(WXULCheckStep step, WXCheckULStepResult* resu
 
 @end
 
+
+#pragma mark - WXQRCodePayReq
+@interface WXQRCodePayReq : BaseReq
+/** 码内容
+ * @note 必填，码长度必须大于0且小于10K
+ */
+@property (nonatomic, copy) NSString *codeContent;
+/** 额外信息
+ * @note 长度必须大于0且小于10K
+ */
+@property (nonatomic, copy) NSString *extraMsg;
+
+@end
+
+@interface WXQRCodePayResp : BaseResp
+@end
+
 #endif
 
 
@@ -268,6 +286,15 @@ typedef void(^WXCheckULCompletion)(WXULCheckStep step, WXCheckULStepResult* resu
  */
 @property (nonatomic, copy) NSString *state;
 
+@property (nonatomic, assign) BOOL isOption1;
+
+/** 是否关闭自动授权
+ * @note YES为关闭自动授权，每次登陆都需要用户手动授权；NO为允许自动授权
+ */
+@property (nonatomic, assign) BOOL nonautomatic;
+
+@property (nonatomic, copy) NSString *extData;
+
 @end
 
 #pragma mark - SendAuthResp
@@ -287,7 +314,90 @@ typedef void(^WXCheckULCompletion)(WXULCheckStep step, WXCheckULStepResult* resu
 @property (nonatomic, copy, nullable) NSString *country;
 @end
 
+#pragma mark - WXStateJumpInfo
+/*! @brief 状态发表时的小尾巴跳转信息
+ */
+@interface WXStateJumpInfo : NSObject
 
+@end
+
+#pragma mark - WXStateJumpUrlInfo
+/*! @brief 状态小尾巴跳转指定url的信息
+ */
+@interface WXStateJumpUrlInfo : WXStateJumpInfo
+/** 跳转到指定的url
+ * @note 必填，url长度必须大于0且小于10K
+ */
+@property (nonatomic, copy) NSString *url;
+
+@end
+
+#pragma mark - WXStateJumpWXMiniProgramInfo
+/*! @brief 状态小尾巴跳转指定小程序的信息
+ */
+@interface WXStateJumpMiniProgramInfo : WXStateJumpInfo
+/** 小程序username
+ * @note 必填
+ */
+@property (nonatomic, copy) NSString *username;
+
+/** 小程序页面的路径
+ * @attention 不填默认拉起小程序首页
+ */
+@property (nonatomic, copy, nullable) NSString *path;
+
+/** 分享小程序的版本
+ * @attention （正式，开发，体验）
+ */
+@property (nonatomic, assign) WXMiniProgramType miniProgramType;
+
+@end
+
+
+
+#pragma mark - WXStateJumpWXMiniProgramInfo
+/*! @brief 状态小尾巴跳转指定视频号主页信息
+ */
+@interface WXStateJumpChannelProfileInfo : WXStateJumpInfo
+/** 视频号username
+ * @note 必填，username长度必须大于0且小于1K
+ */
+@property (nonatomic, copy) NSString *username;
+
+
+@end
+
+#pragma mark - WXStateSceneDataObject
+/*! @brief 场景类型额外参数基类
+ */
+@interface WXSceneDataObject : NSObject
+
+@end
+
+#pragma mark - WXStateSceneDataObject
+/*! @brief 状态场景类型
+ * 用户填写WXStateSceneDataObject参数后，可以跳转到微信状态发表页
+ */
+@interface WXStateSceneDataObject : WXSceneDataObject
+
+/** 状态标志的ID
+ * @note 选填，文本长度必须小于10K
+ */
+@property (nonatomic, copy) NSString *stateId;
+/** 状态发表时附带的文本描述
+ * @note 选填，文本长度必须小于10K
+ */
+@property (nonatomic, copy) NSString *stateTitle;
+/** 后台校验token
+ * @note 选填，文本长度必须小于10K
+ */
+@property (nonatomic, copy) NSString *token;
+/** 小尾巴跳转所需的信息
+ * @note 必填，目前仅支持url跳转
+ */
+@property (nonatomic, strong) WXStateJumpInfo *stateJumpDataInfo;
+
+@end
 
 #pragma mark - SendMessageToWXReq
 /*! @brief 第三方程序发送消息至微信终端程序的消息结构体
@@ -315,6 +425,11 @@ typedef void(^WXCheckULCompletion)(WXULCheckStep step, WXCheckULStepResult* resu
  * @note WXSceneSpecifiedSession时有效
  */
 @property (nonatomic, copy, nullable) NSString *toUserOpenId;
+/** 目标场景附带信息
+ * @note 目前只针对状态场景
+ */
+@property (nonatomic, strong) WXSceneDataObject *sceneDataObject;
+
 @end
 
 #pragma mark - SendMessageToWXResp
@@ -692,6 +807,17 @@ typedef void(^WXCheckULCompletion)(WXULCheckStep step, WXCheckULStepResult* resu
  */
 @property (nonatomic, strong) id mediaObject;
 
+/** 缩略图的hash值
+ * @note 使用sha256得到，用于计算签名
+ */
+@property (nonatomic, copy, nullable) NSString *thumbDataHash;
+
+/** 消息签名
+ * @note 用于校验消息体是否被篡改过
+ */
+@property (nonatomic, copy, nullable) NSString *msgSignature;
+
+
 /*! @brief 设置消息缩略图的方法
  *
  * @param image 缩略图
@@ -721,6 +847,11 @@ typedef void(^WXCheckULCompletion)(WXULCheckStep step, WXCheckULStepResult* resu
  * @note 大小不能超过25M
  */
 @property (nonatomic, strong) NSData *imageData;
+
+/** 图片数据的hash值
+ * @note 使用sha256得到，用于计算签名
+ */
+@property (nonatomic, copy, nullable) NSString *imgDataHash;
 
 @end
 
@@ -770,6 +901,95 @@ typedef void(^WXCheckULCompletion)(WXULCheckStep step, WXCheckULStepResult* resu
 
 
 
+#pragma mark - WXMusicVideoObject
+
+@interface WXMusicVipInfo : NSObject
+
+/**付费歌曲的id
+ * @note 长度不能超过32K
+ */
+@property (nonatomic, copy) NSString *musicId;
+
+@end
+
+
+@interface WXMusicVideoObject : NSObject
+
+/*! @brief 返回一个WXMusicVideoObject对象
+ *
+ * @note 返回的WXMusicVideoObject对象是自动释放的
+ */
++ (WXMusicVideoObject *)object;
+
+/** 音乐网页的url地址
+ * @note 长度不能超过10K，不能为空
+ */
+@property (nonatomic, copy) NSString *musicUrl;
+
+/** 音乐数据url地址
+ * @note 长度不能超过10K，不能为空
+ */
+@property (nonatomic, copy) NSString *musicDataUrl;
+
+/**歌手名
+ * @note 长度不能超过1k，不能为空
+ */
+@property (nonatomic, copy) NSString *singerName;
+
+/**
+ * @note 音乐时长, 单位毫秒
+ */
+@property (nonatomic, assign) UInt32 duration;
+
+/**歌词信息 LRC格式
+ * @note 长度不能超过32K
+ */
+@property (nonatomic, copy) NSString *songLyric;
+
+/**高清封面图
+ * @note 大小不能超过1M
+ */
+@property (nonatomic, strong) NSData *hdAlbumThumbData;
+
+/** 高清封面图数据的hash值
+ * @note 使用sha256得到，用于计算签名
+ */
+@property (nonatomic, copy, nullable) NSString *hdAlbumThumbFileHash;
+
+/**音乐专辑名称
+ * @note 长度不能超过1k
+ */
+@property (nonatomic, copy, nullable) NSString *albumName;
+
+/**音乐流派
+ * @note 长度不能超过1k
+ */
+@property (nonatomic, copy, nullable) NSString *musicGenre;
+
+/**发行时间
+ * @note Unix时间戳，单位为秒
+ */
+@property (nonatomic, assign) UInt64 issueDate;
+
+/**音乐标识符
+ * @note 长度不能超过1K，从微信跳回应用时会带上
+ */
+@property (nonatomic, copy, nullable) NSString *identification;
+
+/**运营H5地址
+ * @note 选填，建议填写，用户进入歌曲详情页将展示内嵌的运营H5，可展示该歌曲的相关评论、歌曲推荐等内容，不可诱导下载、分享等。
+ */
+@property (nonatomic, copy, nullable) NSString *musicOperationUrl;
+
+/** 付费歌曲相关信息
+ * @note 选填，如果歌曲是需要付费的，那么将付费歌曲id等信息封装在内。
+ */
+@property (nonatomic, strong) WXMusicVipInfo *musicVipInfo;
+
+@end
+
+
+
 #pragma mark - WXVideoObject
 /*! @brief 多媒体消息中包含的视频数据对象
  *
@@ -814,6 +1034,13 @@ typedef void(^WXCheckULCompletion)(WXULCheckStep step, WXCheckULStepResult* resu
  * @note 不能为空且长度不能超过10K
  */
 @property (nonatomic, copy) NSString *webpageUrl;
+
+/**是否是私密消息
+ */
+@property (nonatomic, assign) BOOL isSecretMessage;
+
+/** 业务所需的额外信息 */
+@property (nonatomic, strong, nullable) NSDictionary *extraInfoDic;
 
 @end
 
@@ -982,6 +1209,30 @@ typedef void(^WXCheckULCompletion)(WXULCheckStep step, WXCheckULStepResult* resu
 /** 是否禁用转发 */
 @property (nonatomic, assign) BOOL disableForward;
 
+@property (nonatomic, assign) BOOL isUpdatableMessage;
+
+@property (nonatomic, assign) BOOL isSecretMessage;
+
+
+/** 业务所需的额外信息 */
+@property (nonatomic, strong, nullable) NSDictionary *extraInfoDic;
+
+@end
+
+#pragma mark - WXGameLiveObject
+
+/*! @brief WXGameLiveObject对象
+ *
+ * @note 游戏直播消息类型
+ */
+
+@interface WXGameLiveObject : NSObject
+
++ (WXGameLiveObject *)object;
+
+/** 业务所需的额外信息 */
+@property (nonatomic, strong, nullable) NSDictionary *extraInfoDic;
+
 @end
 
 #pragma mark - WXLaunchMiniProgramReq
@@ -1072,4 +1323,49 @@ typedef void(^WXCheckULCompletion)(WXULCheckStep step, WXCheckULStepResult* resu
 @property (nonatomic, copy, nullable) NSString *extMsg;
 
 @end
+
+#pragma mark - WXOpenCustomerServiceReq
+@interface WXOpenCustomerServiceReq : BaseReq
+
++ (WXOpenCustomerServiceReq *)object;
+
+/**企微客服发起流程 url
+ */
+@property (nonatomic, copy, nullable) NSString *url;
+
+/**企业 id
+ */
+@property (nonatomic, copy, nullable) NSString *corpid;
+
+@end
+
+@interface WXOpenCustomerServiceResp : BaseResp
+
+/** 业务返回数据
+ */
+@property (nonatomic, copy, nullable) NSString *extMsg;
+
+@end
+
+
+#pragma mark - WXChannelStartLiveReq
+
+@interface WXChannelStartLiveReq : BaseReq
+
++ (WXChannelStartLiveReq *)object;
+
+/** 必填，直播业务数据（json格式）
+ */
+@property (nonatomic, copy) NSString *liveJsonInfo;
+
+@end
+
+@interface WXChannelStartLiveResp : BaseResp
+
+/** 业务返回数据
+ */
+@property (nonatomic, copy, nullable) NSString *extMsg;
+
+@end
+
 NS_ASSUME_NONNULL_END

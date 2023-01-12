@@ -1,26 +1,57 @@
 <img height="200" src="./weixin.png?raw=true">
 
 # React-Native-Wechat-Lib
+![npm version](https://img.shields.io/badge/npm-v1.1.24-blue)
+![Wechat SDK](https://img.shields.io/badge/WechatSDKAndroid-V6.8.20-brightgreen)
+![Wechat SDK](https://img.shields.io/badge/WechatSDKIos-V2.0-brightgreen)
+![react version](https://img.shields.io/badge/react-v70-blue)
+
+本库为 react-native 项目提供 Wechat SDK 支持
 
 [React Native] bridging library that integrates WeChat SDKs:
 
-- [x] iOS SDK 1.8.7.1
-- [x] Android SDK 5.5.6
+- Android SDK 6.8.20
+- iOS SDK 2.0
 
-## 前言
+<br>
+<br>
 
-首先向各位声明，本库是在 [react-native-wechat](https://github.com/yorkie/react-native-wechat) 基础上进行重写。
+## 路线图
+- 3.0.0
+  - [√] React native 70
+  - [√] Android SDK 6.8.20
+  - [X] iOS SDK 2.0
+  - [X] iOS SDK 2.0 No payment function
+  - [√] Example
+- 1.1.x
+  - [√] React native 60
+  - [√] Android SDK 5.5.6
+  - [√] iOS SDK 1.8.7.1
+  - [√] iOS SDK 1.8.7.1 No payment function
 
-本库已经向 react-native-wechat 提交合并请求[#526](https://github.com/yorkie/react-native-wechat/pull/526)，但由于 react-native-wechat 所使用的 WeChat SDK 已经是几年前的版本，新 SDK 接口变动大，我修改的代码相当多，几乎重构了核心部分，导致合并需要耗费不小时间，再加上需要兼容正在使用旧版 SDK 的开发者，事情变得异常艰辛。
+<br>
+<br>
 
-考虑到自身使用和其它开发者的需要，最终决定开一个新仓库，提供给新项目使用。
+## 注意
+如果你的 IOS 应用需要使用**不带支付功能**的 WeChat SDK，请使用带有 “-notpay” 后缀的 NPM 包。
 
-最后，感谢 [yorkie](https://github.com/yorkie) 和各位开发者为 react-native-wechat 做出的贡献。
+目前最新代码版本为 3.0.0，但 NPM Last 版本暂时只到 1.1.24，因为 **3.0.0 暂时还处于开发阶段**，很多功能**未经过测试**。
+
+如果你需要使用 3.0.0 版本，请在 package.json 中加上版本号 react-native-wechat-lib@3.0.0，切换前请你清楚了解该版本的风险，该版本为开发版。
+
+我会尽快推出 3.0.0 发行版。
+
+<br>
+<br>
 
 ## 附言
+本库由 [little-snow-fox](https://github.com/little-snow-fox/react-native-wechat-lib) 发起。
 
-如果你的 IOS 应用需要使用**不带支付功能**的 WeChat SDK，请使用带有 “-notpay” 后缀的 NPM 包。  
-If you need to use the WeChat SDK without payment for your IOS version, use the NPM package with the suffix "-notpay".
+希望各位大佬积极提交 PR，单靠我一个人维护工作量大。
+
+
+<br>
+<br>
 
 ## 目录
 
@@ -28,17 +59,28 @@ If you need to use the WeChat SDK without payment for your IOS version, use the 
 - [起步](#起步)
 - [API 文档](#API文档)
 
+<br>
+<br>
+
 ## 安装
 
 ```sh
 npm install react-native-wechat-lib --save
+# 3.0.0 开始弃用
 react-native link react-native-wechat-lib
 ```
+
+<br>
+<br>
 
 ## 起步
 
 - [iOS 安装](./docs/build-setup-ios.md)
 - [Android 安装](./docs/build-setup-android.md)
+- [样例工程](./example)
+
+<br>
+<br>
 
 ## API 文档
 
@@ -445,3 +487,12 @@ Sends request for proceeding payment, then returns an object:
 ## License
 
 MIT
+
+Author: [little-snow-fox](https://github.com/little-snow-fox/react-native-wechat-lib)
+
+## Sponsor
+如果觉得本库还行，你愿意的话可以请我喝咖啡 ^_^ 。
+
+<img src="./image/wepay.jpg" alt="wepay" width="380" />
+<img src="./image/alipay.jpg" alt="alipay" width="380" />
+
