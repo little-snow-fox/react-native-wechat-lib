@@ -15,7 +15,6 @@
 - iOS SDK 2.0
 
 <br>
-<br>
 
 ## 路线图
 - 3.0.0
@@ -31,7 +30,6 @@
   - [X] iOS SDK 1.8.7.1 No payment function
 
 <br>
-<br>
 
 ## 注意
 如果你的 IOS 应用需要使用**不带支付功能**的 WeChat SDK，请使用带有 “-notpay” 后缀的 NPM 包。
@@ -43,7 +41,6 @@
 我会尽快推出 3.0.0 发行版。
 
 <br>
-<br>
 
 ## 附言
 本库由 [little-snow-fox](https://github.com/little-snow-fox/react-native-wechat-lib) 发起。
@@ -52,7 +49,6 @@
 
 
 <br>
-<br>
 
 ## 目录
 
@@ -60,7 +56,6 @@
 - [起步](#起步)
 - [API 文档](#API文档)
 
-<br>
 <br>
 
 ## 安装
@@ -72,7 +67,6 @@ react-native link react-native-wechat-lib
 ```
 
 <br>
-<br>
 
 ## 起步
 
@@ -80,7 +74,6 @@ react-native link react-native-wechat-lib
 - [Android 安装](./docs/build-setup-android.md)
 - [样例工程](./example)
 
-<br>
 <br>
 
 ## API 文档
@@ -485,11 +478,15 @@ Sends request for proceeding payment, then returns an object:
     });
 ```
 
+<br>
+
 ## License
 
 MIT
 
 Author: [little-snow-fox](https://github.com/little-snow-fox/react-native-wechat-lib)
+
+<br>
 
 ## Sponsor
 如果觉得本库还行，你愿意的话可以请我喝咖啡 ^_^ 。
