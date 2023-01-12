@@ -59,11 +59,19 @@
 <br>
 
 ## 安装
-
+NPM 安装
 ```sh
 npm install react-native-wechat-lib --save
 # 3.0.0 开始弃用
 react-native link react-native-wechat-lib
+```
+源码安装
+```sh
+git clone https://github.com/little-snow-fox/react-native-wechat-lib
+cd react-native-wechat-lib
+npm link
+cd ../my-project
+npm link react-native-wechat-lib
 ```
 
 <br>
