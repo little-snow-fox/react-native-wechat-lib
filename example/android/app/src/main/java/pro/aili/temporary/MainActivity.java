@@ -1,4 +1,4 @@
-package org.bigbug.member.rnapp;
+package pro.aili.temporary;
 
 import com.facebook.react.ReactActivity;
 import com.facebook.react.ReactActivityDelegate;

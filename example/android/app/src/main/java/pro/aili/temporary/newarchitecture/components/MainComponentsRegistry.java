@@ -1,4 +1,4 @@
-package org.bigbug.member.rnapp.newarchitecture.components;
+package pro.aili.temporary.newarchitecture.components;
 
 import com.facebook.jni.HybridData;
 import com.facebook.proguard.annotations.DoNotStrip;

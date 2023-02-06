@@ -1,13 +1,13 @@
 import * as React from 'react';
 
 import { StyleSheet, View, Text, Button, Alert } from 'react-native';
-import { getApiVersion, registerApp, openWXApp, sendAuthRequest } from 'react-native-wechat-lib';
+import { getApiVersion, registerApp, openWXApp, sendAuthRequest, shareText } from 'react-native-wechat-lib';
 
 export default function App() {
   const [versionNumber, setVersionNumber] = React.useState<string | undefined>();
 
   React.useEffect(() => {
-    registerApp('wx48d112e107595c4f', 'universalLink').then((res) => {
+    registerApp('wx7973caefdffba1b8', 'universalLink').then((res) => {
       console.log("registerApp: " + res)
       getApiVersion().then((num) => {
         console.log("test: " + num)
@@ -18,7 +18,7 @@ export default function App() {
 
   }, []);
 
-  function login() {
+  function onLogin() {
     sendAuthRequest('snsapi_userinfo', '')
       .then((response: any) => {
         // todo 登录 response.code
@@ -36,6 +36,13 @@ export default function App() {
 
   }
 
+  function onShareText() {
+    shareText({
+      text: 'test content.',
+      scene: 0
+    }).then()
+  }
+
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Call wechat SDK demo</Text>
@@ -47,7 +54,10 @@ export default function App() {
           <Button title={'拉起微信'} onPress={() => { openWXApp().then() }} />
         </View>
         <View style={styles.button}>
-          <Button title={'授权登录'} onPress={() => { login() }} />
+          <Button title={'授权登录'} onPress={() => { onLogin() }} />
+        </View>
+        <View style={styles.button}>
+          <Button title={'分享'} onPress={() => { onShareText() }} />
         </View>
       </View>
     </View>

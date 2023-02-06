@@ -1,4 +1,4 @@
-package org.bigbug.member.rnapp.newarchitecture;
+package pro.aili.temporary.newarchitecture;
 
 import android.app.Application;
 import androidx.annotation.NonNull;
@@ -19,9 +19,9 @@ import com.facebook.react.fabric.CoreComponentsRegistry;
 import com.facebook.react.fabric.FabricJSIModuleProvider;
 import com.facebook.react.fabric.ReactNativeConfig;
 import com.facebook.react.uimanager.ViewManagerRegistry;
-import org.bigbug.member.rnapp.BuildConfig;
-import org.bigbug.member.rnapp.newarchitecture.components.MainComponentsRegistry;
-import org.bigbug.member.rnapp.newarchitecture.modules.MainApplicationTurboModuleManagerDelegate;
+import pro.aili.temporary.BuildConfig;
+import pro.aili.temporary.newarchitecture.components.MainComponentsRegistry;
+import pro.aili.temporary.newarchitecture.modules.MainApplicationTurboModuleManagerDelegate;
 import java.util.ArrayList;
 import java.util.List;
 

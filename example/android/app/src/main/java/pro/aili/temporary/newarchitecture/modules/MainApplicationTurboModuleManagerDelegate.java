@@ -1,4 +1,4 @@
-package org.bigbug.member.rnapp.newarchitecture.modules;
+package pro.aili.temporary.newarchitecture.modules;
 
 import com.facebook.jni.HybridData;
 import com.facebook.react.ReactPackage;
