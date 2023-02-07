@@ -55,7 +55,7 @@ Then add the following node to `AndroidManifest.xml`:
 </manifest>
 ```
 
-**Integrating the WeChat Payment**
+## 支付回调
 
 If you are going to integrate payment functionality by using this library, then
 create a package named also `wxapi` in your application package and a class named
@@ -111,4 +111,18 @@ android:launchMode="singleTask"
     />
   </application>
 </manifest>
+```
+
+## 关于 Android11
+微信将于近期发布 targetSdkVersion 30的客户端版本，因Android11系统特性，该微信版本在Android 11及以上系统版本的设备上运行时，授权登录、分享、微信支付等功能受到影响，可能无法正常使用。为了适配 Android 系统新版本特性，保证微信功能正常使用，请第三方应用2021年11月1日之前进行更新
+
+在自己 React Native 项目的 android/app/src/main/AndroidManifest.xml 中添加:
+```$xml
+<queries>
+    <!--
+      微信 Android 11-更新 openSDK 适配
+      参见 https://developers.weixin.qq.com/doc/oplatform/Mobile_App/Access_Guide/Android.html#jump2
+    -->
+    <package android:name="com.tencent.mm" />
+/queries>
 ```
