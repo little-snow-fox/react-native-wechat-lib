@@ -2,6 +2,7 @@
 
 ## 注意
 请根据本文档严格配置，否则会导致微信无法回调你的应用，例如授权登录后无法跳回 APP，或者小程序无法拉起 APP
+
 如果配置过程有不明白，可以查看 [样本工程](https://github.com/little-snow-fox/react-native-wechat-lib/tree/master/example)
 在样本工程里搜索 '**react-native-wechat-lib support**' 便可以找到所有需要添加配置的地方
 
