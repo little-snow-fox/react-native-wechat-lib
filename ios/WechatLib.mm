@@ -12,8 +12,6 @@
 #define NOT_REGISTERED (@"registerApp required.")
 #define INVOKE_FAILED (@"WeChat API invoke returns false.")
 
-@implementation RCTWeChat
-
 @synthesize bridge = _bridge;
 
 RCT_EXPORT_MODULE()
@@ -231,7 +229,7 @@ RCT_EXPORT_METHOD(shareText:(NSDictionary *)data
     SendMessageToWXReq *req = [[SendMessageToWXReq alloc] init];
     req.bText = YES;
     req.text = data[@"text"];
-    req.scene = [data[@"scene"] integerValue];
+    req.scene = [data[@"scene"] intValue];
     void ( ^ completion )( BOOL );
     completion = ^( BOOL success )
     {
@@ -278,7 +276,7 @@ RCT_EXPORT_METHOD(shareFile:(NSDictionary *)data
     SendMessageToWXReq *req = [[SendMessageToWXReq alloc] init];
     req.bText = NO;
     req.message = message;
-    req.scene = [data[@"scene"] integerValue];
+    req.scene = [data[@"scene"] intValue];
     void ( ^ completion )( BOOL );
     completion = ^( BOOL success )
     {
@@ -322,7 +320,7 @@ RCT_EXPORT_METHOD(shareImage:(NSDictionary *)data
     SendMessageToWXReq *req = [[SendMessageToWXReq alloc] init];
     req.bText = NO;
     req.message = message;
-    req.scene = [data[@"scene"] integerValue];
+    req.scene = [data[@"scene"] intValue];
     //    [WXApi sendReq:req];
     void ( ^ completion )( BOOL );
     completion = ^( BOOL success )
@@ -367,7 +365,7 @@ RCT_EXPORT_METHOD(shareLocalImage:(NSDictionary *)data
     SendMessageToWXReq *req = [[SendMessageToWXReq alloc] init];
     req.bText = NO;
     req.message = message;
-    req.scene = [data[@"scene"] integerValue];
+    req.scene = [data[@"scene"] intValue];
     //    [WXApi sendReq:req];
     void ( ^ completion )( BOOL );
     completion = ^( BOOL success )
@@ -401,7 +399,7 @@ RCT_EXPORT_METHOD(shareMusic:(NSDictionary *)data
     SendMessageToWXReq *req = [[SendMessageToWXReq alloc] init];
     req.bText = NO;
     req.message = message;
-    req.scene = [data[@"scene"] integerValue];
+    req.scene = [data[@"scene"] intValue];
     void ( ^ completion )( BOOL );
     completion = ^( BOOL success )
     {
@@ -430,7 +428,7 @@ RCT_EXPORT_METHOD(shareVideo:(NSDictionary *)data
     SendMessageToWXReq *req = [[SendMessageToWXReq alloc] init];
     req.bText = NO;
     req.message = message;
-    req.scene = [data[@"scene"] integerValue];
+    req.scene = [data[@"scene"] intValue];
     void ( ^ completion )( BOOL );
     completion = ^( BOOL success )
     {
@@ -458,7 +456,7 @@ RCT_EXPORT_METHOD(shareWebpage:(NSDictionary *)data
     SendMessageToWXReq *req = [[SendMessageToWXReq alloc] init];
     req.bText = NO;
     req.message = message;
-    req.scene = [data[@"scene"] integerValue];
+    req.scene = [data[@"scene"] intValue];
     void ( ^ completion )( BOOL );
     completion = ^( BOOL success )
     {
@@ -483,7 +481,8 @@ RCT_EXPORT_METHOD(shareMiniProgram:(NSDictionary *)data
         object.hdImageData = [self compressImage: image toByte:131072];
     }
     object.withShareTicket = data[@"withShareTicket"];
-    object.miniProgramType = [data[@"miniProgramType"] integerValue];
+    int miniProgramType = [data[@"miniProgramType"] integerValue];
+    object.miniProgramType = [self integerToWXMiniProgramType:miniProgramType];
     WXMediaMessage *message = [WXMediaMessage message];
     message.title = data[@"title"];
     message.description = data[@"description"];
@@ -534,7 +533,9 @@ RCT_EXPORT_METHOD(launchMiniProgram:(NSDictionary *)data
     // 拉起小程序页面的可带参路径，不填默认拉起小程序首页
     launchMiniProgramReq.path = data[@"path"];
     // 拉起小程序的类型
-    launchMiniProgramReq.miniProgramType = [data[@"miniProgramType"] integerValue];
+    int miniProgramType = [data[@"miniProgramType"] integerValue];
+    launchMiniProgramReq.miniProgramType = [self integerToWXMiniProgramType:miniProgramType];
+    // launchMiniProgramReq.miniProgramType = [data[@"miniProgramType"] integerValue];
     void ( ^ completion )( BOOL );
     completion = ^( BOOL success )
     {
@@ -642,6 +643,22 @@ RCT_EXPORT_METHOD(pay:(NSDictionary *)data
         body[@"type"] = @"WXChooseInvoiceResp.Resp";
         [self.bridge.eventDispatcher sendDeviceEventWithName:RCTWXEventName body:body];
     }
+}
+
+-(WXMiniProgramType) integerToWXMiniProgramType:(int)value {
+    WXMiniProgramType type = WXMiniProgramTypeRelease;
+    switch (value) {
+        case 0:
+            type = WXMiniProgramTypeRelease;
+            break;
+        case 1:
+            type = WXMiniProgramTypeTest;
+            break;
+        case 2:
+            type = WXMiniProgramTypePreview;
+            break;
+    }
+    return type;
 }
 
 @end
