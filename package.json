@@ -1,7 +1,7 @@
 {
   "name": "react-native-wechat-lib",
-  "version": "3.0.2",
-  "description": "test",
+  "version": "3.0.4",
+  "description": "React-Native(iOS/Android) functionalities include WeChat Login, Share, Favorite and Payment.",
   "main": "lib/commonjs/index",
   "module": "lib/module/index",
   "types": "lib/typescript/index.d.ts",
