@@ -67,7 +67,7 @@ package your.package.wxapi;
 
 import android.app.Activity;
 import android.os.Bundle;
-import com.theweflex.react.WeChatModule;
+import com.wechatlib;
 
 public class WXPayEntryActivity extends Activity {
   @Override

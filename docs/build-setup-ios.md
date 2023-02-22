@@ -92,3 +92,6 @@ Universal Links 配置文件, 没使用的话可以忽略。
 ```
 Mainly need to add '#import "WXApi.h"' and 'wxapidelegate'.  
 主要是需要加上 '#import "WXApi.h"' 和 'WXApiDelegate' 。
+
+## 4. 从版本 3.0.0 开始，需要手动导入 libWeChatSDK.a 到 XCode
+直接复制本项目的 /ios/libWeChatSDK.a 到 Xcode 项目根目录，详细可参考 example 工程
