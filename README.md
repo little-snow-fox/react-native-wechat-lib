@@ -20,7 +20,7 @@
 - 3.0.0
   - [X] React native 70
   - [X] Android SDK 6.8.20
-  - [ ] iOS SDK 2.0
+  - [X] iOS SDK 2.0
   - [ ] iOS SDK 2.0 No payment function
   - [X] Example
 - 1.1.x
