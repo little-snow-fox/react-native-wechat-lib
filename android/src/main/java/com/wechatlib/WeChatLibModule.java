@@ -32,6 +32,7 @@ import com.facebook.react.modules.core.DeviceEventManagerModule;
 import com.tencent.mm.opensdk.modelbase.BaseReq;
 import com.tencent.mm.opensdk.modelbase.BaseResp;
 import com.tencent.mm.opensdk.modelbiz.ChooseCardFromWXCardPackage;
+import com.tencent.mm.opensdk.modelbiz.WXOpenCustomerServiceChat;
 import com.tencent.mm.opensdk.modelmsg.SendAuth;
 import com.tencent.mm.opensdk.modelmsg.SendMessageToWX;
 import com.tencent.mm.opensdk.modelmsg.ShowMessageFromWX;
@@ -670,6 +671,20 @@ public class WeChatLibModule extends ReactContextBaseJavaModule implements IWXAP
         }
         payReq.appId = appId;
         callback.invoke(api.sendReq(payReq) ? null : INVOKE_FAILED);
+    }
+
+    @ReactMethod
+    public void openCustomerServiceChat(String kfUrl, Callback callback) {
+        if (api == null) {
+            callback.invoke(NOT_REGISTERED);
+            return;
+        }
+        // open customer service logic
+        WXOpenCustomerServiceChat.Req req = new WXOpenCustomerServiceChat.Req();
+
+        req.corpId = this.appId;
+        req.url = kfUrl;
+        callback.invoke(null, api.sendReq(req));
     }
 
     private void _share(final int scene, final ReadableMap data, final Callback callback) {

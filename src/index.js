@@ -146,13 +146,19 @@ export const getApiVersion = wrapApi(WeChat.getApiVersion);
  * @return {Promise}
  */
 export const openWXApp = wrapApi(WeChat.openWXApp);
+/**
+ * Open wechat app
+ * @method openCustomerServiceChat
+ * @return {Promise}
+ */
+export const openCustomerServiceChat = wrapApi(WeChat.openCustomerServiceChat);
 
 // wrap the APIs
-const nativeShareToTimeline = wrapApi(WeChat.shareToTimeline);
+// const nativeShareToTimeline = wrapApi(WeChat.shareToTimeline);
 const nativeLaunchMiniProgram = wrapApi(WeChat.launchMiniProgram);
-const nativeShareToSession = wrapApi(WeChat.shareToSession);
+// const nativeShareToSession = wrapApi(WeChat.shareToSession);
 const nativeShareToFavorite = wrapApi(WeChat.shareToFavorite);
-const nativeSendAuthRequest = wrapApi(WeChat.sendAuthRequest);
+// const nativeSendAuthRequest = wrapApi(WeChat.sendAuthRequest);
 const nativeShareText = wrapApi(WeChat.shareText);
 const nativeShareImage = wrapApi(WeChat.shareImage);
 const nativeShareLocalImage = wrapApi(WeChat.shareLocalImage);
@@ -385,14 +391,22 @@ export function shareMiniProgram(data) {
  * @param {Integer} miniProgramType - 拉起小程序的类型. 0-正式版 1-开发版 2-体验版
  * @param {String} path - 拉起小程序页面的可带参路径，不填默认拉起小程序首页
  */
-export function launchMiniProgram({ userName, miniProgramType = 0, path = '' }) {
+export function launchMiniProgram({
+  userName,
+  miniProgramType = 0,
+  path = '',
+}) {
   return new Promise((resolve, reject) => {
-    if (miniProgramType !== 0 && miniProgramType !== 1 && miniProgramType !== 2) {
+    if (
+      miniProgramType !== 0 &&
+      miniProgramType !== 1 &&
+      miniProgramType !== 2
+    ) {
       reject(
         new WechatError({
           errStr: '拉起小程序的类型不对，0-正式版 1-开发版 2-体验版',
           errCode: -1,
-        }),
+        })
       );
       return;
     }
