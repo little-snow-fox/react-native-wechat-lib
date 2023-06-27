@@ -674,7 +674,7 @@ public class WeChatLibModule extends ReactContextBaseJavaModule implements IWXAP
     }
 
     @ReactMethod
-    public void openCustomerServiceChat(String kfUrl, Callback callback) {
+    public void openCustomerServiceChat(String corpId, String kfUrl, Callback callback) {
         if (api == null) {
             callback.invoke(NOT_REGISTERED);
             return;
@@ -682,7 +682,7 @@ public class WeChatLibModule extends ReactContextBaseJavaModule implements IWXAP
         // open customer service logic
         WXOpenCustomerServiceChat.Req req = new WXOpenCustomerServiceChat.Req();
 
-        req.corpId = this.appId;
+        req.corpId = corpId;
         req.url = kfUrl;
         callback.invoke(null, api.sendReq(req));
     }

@@ -569,11 +569,12 @@ RCT_EXPORT_METHOD(pay:(NSDictionary *)data
 }
 
 // 跳转微信客服
-RCT_EXPORT_METHOD(openCustomerServiceChat:(NSString *)kfUrl
+RCT_EXPORT_METHOD(openCustomerServiceChat:(NSString *)corpId
+                  :(NSString *)kfUrl
                   :(RCTResponseSenderBlock)callback)
 {
     WXOpenCustomerServiceReq *req = [[WXOpenCustomerServiceReq alloc] init];
-    req.corpid = self.appId;    //企业ID
+    req.corpid = corpId;    //企业ID
     req.url = kfUrl;            //客服URL
     [WXApi sendReq:req completion:nil];
 }
