@@ -568,6 +568,17 @@ RCT_EXPORT_METHOD(pay:(NSDictionary *)data
     // callback(@[success ? [NSNull null] : INVOKE_FAILED]);
 }
 
+// 跳转微信客服
+RCT_EXPORT_METHOD(openCustomerServiceChat:(NSString *)corpId
+                  :(NSString *)kfUrl
+                  :(RCTResponseSenderBlock)callback)
+{
+    WXOpenCustomerServiceReq *req = [[WXOpenCustomerServiceReq alloc] init];
+    req.corpid = corpId;    //企业ID
+    req.url = kfUrl;            //客服URL
+    [WXApi sendReq:req completion:nil];
+}
+
 #pragma mark - wx callback
 
 -(void) onReq:(BaseReq*)req

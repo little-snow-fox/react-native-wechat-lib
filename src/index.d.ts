@@ -9,7 +9,14 @@ enum WXScene {
 }
 
 declare module 'react-native-wechat-lib' {
-  export function registerApp(appId: string, universalLink?: string): Promise<boolean>;
+  export function registerApp(
+    appId: string,
+    universalLink?: string
+  ): Promise<boolean>;
+  export function openCustomerServiceChat(
+    corpId: string,
+    kfUrl: string
+  ): Promise<string>;
   export function isWXAppInstalled(): Promise<boolean>;
   export function isWXAppSupportApi(): Promise<boolean>;
   export function getApiVersion(): Promise<string>;
@@ -39,9 +46,20 @@ declare module 'react-native-wechat-lib' {
     state?: string;
     returnKey?: string;
   }
-  export function sendAuthRequest(scope: string | string[], state?: string): Promise<AuthResponse>;
+  export function sendAuthRequest(
+    scope: string | string[],
+    state?: string
+  ): Promise<AuthResponse>;
   export interface ShareMetadata {
-    type: 'news' | 'text' | 'imageUrl' | 'imageFile' | 'imageResource' | 'video' | 'audio' | 'file';
+    type:
+      | 'news'
+      | 'text'
+      | 'imageUrl'
+      | 'imageFile'
+      | 'imageResource'
+      | 'video'
+      | 'audio'
+      | 'file';
     thumbImage?: string;
     description?: string;
     webpageUrl?: string;
@@ -109,31 +127,31 @@ declare module 'react-native-wechat-lib' {
   }
 
   export function shareText(
-    message: ShareTextMetadata,
+    message: ShareTextMetadata
   ): Promise<{ errCode?: number; errStr?: string }>;
   export function shareImage(
-    message: ShareImageMetadata,
+    message: ShareImageMetadata
   ): Promise<{ errCode?: number; errStr?: string }>;
   export function shareLocalImage(
-    message: ShareImageMetadata,
+    message: ShareImageMetadata
   ): Promise<{ errCode?: number; errStr?: string }>;
   export function shareMusic(
-    message: ShareMusicMetadata,
+    message: ShareMusicMetadata
   ): Promise<{ errCode?: number; errStr?: string }>;
   export function shareVideo(
-    message: ShareVideoMetadata,
+    message: ShareVideoMetadata
   ): Promise<{ errCode?: number; errStr?: string }>;
   export function shareWebpage(
-    message: ShareWebpageMetadata,
+    message: ShareWebpageMetadata
   ): Promise<{ errCode?: number; errStr?: string }>;
   export function shareMiniProgram(
-    message: ShareMiniProgramMetadata,
+    message: ShareMiniProgramMetadata
   ): Promise<{ errCode?: number; errStr?: string }>;
   export function launchMiniProgram(
-    message: LaunchMiniProgramMetadata,
+    message: LaunchMiniProgramMetadata
   ): Promise<{ errCode?: number; errStr?: string }>;
   export function subscribeMessage(
-    message: SubscribeMessageMetadata,
+    message: SubscribeMessageMetadata
   ): Promise<{ errCode?: number; errStr?: string }>;
   export interface PaymentLoad {
     partnerId: string;
@@ -143,7 +161,9 @@ declare module 'react-native-wechat-lib' {
     package: string;
     sign: string;
   }
-  export function pay(payload: PaymentLoad): Promise<{ errCode?: number; errStr?: string }>;
+  export function pay(
+    payload: PaymentLoad
+  ): Promise<{ errCode?: number; errStr?: string }>;
 
   export interface ChooseInvoice {
     signType?: string;
@@ -159,7 +179,7 @@ declare module 'react-native-wechat-lib' {
   }
 
   export function chooseInvoice(
-    data: ChooseInvoice,
+    data: ChooseInvoice
   ): Promise<{ errCode?: number; errStr?: string; cards: Invoice[] }>;
 
   export interface ShareFileMetadata {
@@ -169,6 +189,6 @@ declare module 'react-native-wechat-lib' {
     scene?: WXScene;
   }
   export function shareFile(
-    data: ShareFileMetadata,
+    data: ShareFileMetadata
   ): Promise<{ errCode?: number; errStr?: string }>;
 }
