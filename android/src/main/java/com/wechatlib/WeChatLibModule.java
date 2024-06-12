@@ -112,7 +112,7 @@ public class WeChatLibModule extends ReactContextBaseJavaModule implements IWXAP
 
     @Override
     public String getName() {
-        return "RCTWeChat";
+        return "WeChat";
     }
 
     /**
