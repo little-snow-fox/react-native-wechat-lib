@@ -254,7 +254,13 @@ RCT_EXPORT_METHOD(shareFile
 	NSString *url = data[@"url"];
 	WXFileObject *file = [[WXFileObject alloc] init];
 	file.fileExtension = data[@"ext"];
-	NSData *fileData = [NSData dataWithContentsOfURL:[NSURL URLWithString:url]];
+
+    NSData *fileData;
+    if ([url hasPrefix:@"http"]) {
+        fileData = [NSData dataWithContentsOfURL:[NSURL URLWithString: url]];
+    } else {
+        fileData = [NSData dataWithContentsOfFile:url];
+    }
 	file.fileData = fileData;
 
 	WXMediaMessage *message = [WXMediaMessage message];
