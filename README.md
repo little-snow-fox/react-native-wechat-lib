@@ -226,7 +226,7 @@ ShareFileMetadata
 
 | name  | type   | description    |
 | ----- | ------ | -------------- |
-| url   | String | 文件地址       |
+| url   | String | 文件地址。如果是远程文件，则为 http 开头；如果是本地文件，则为绝对路径，如 /storage/emulated/0/Android/xxx |
 | title | String | 文件标题       |
 | scene | Number | 分享到, 0:会话 |
 
@@ -236,6 +236,9 @@ Return:
 | ------- | ------ | ----------------------------------- |
 | errCode | Number | 0 if authorization succeed          |
 | errStr  | String | Error message if any error occurred |
+
+
+安卓实现分享本地文件需要对工程进行一些配置，详见 [Android 安装](./docs/build-setup-android.md#分享本地文件)
 
 ```js
 import * as WeChat from 'react-native-wechat-lib';

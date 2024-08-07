@@ -114,6 +114,43 @@ android:launchMode="singleTask"
 </manifest>
 ```
 
+## 分享本地文件
+如果你需要分享本地文件，需要在 Android 的工程里进行一些设置，否则会有权限问题
+
+步骤 1：app/src/main/AndroidManifest.xml 中添加 provider 标签，其中 com.yourapp.xxx 要替换为你自己的包名，记得保留后面的 `.fileprovider`
+
+```xml
+<application ...>
+    ...
+    <provider
+        android:name="androidx.core.content.FileProvider"
+        android:authorities="com.yourapp.xxx.fileprovider"
+        android:exported="false"
+        android:grantUriPermissions="true">
+        <meta-data
+            android:name="android.support.FILE_PROVIDER_PATHS"
+            android:resource="@xml/filepaths" />
+    </provider>
+    ...
+</application>
+```
+
+步骤 2：实现 app/src/main/res/xml/filepaths.xml
+
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+<paths xmlns:android="http://schemas.android.com/apk/res/android">
+    <external-files-path name="myexternalimages" path="Download/" />
+    <cache-path name="my_cache_files" path="." />
+    <root-path name="root" path="" />
+    <files-path name="files-path" path="." />
+</paths>
+```
+
+在这个 XML 文件中，你可以定义不同的路径类型（如 cache-path、external-path 等），以及对应的路径前缀。这样，在使用 FileProvider.getUriForFile() 时，就可以根据这些定义来获取正确的 URI。
+
+请注意，当组件库被集成到不同的应用中时，你可能需要根据你自己的需求调整 filepaths.xml 中的路径定义。
+
 ## 关于 Android11
 微信将于近期发布 targetSdkVersion 30的客户端版本，因Android11系统特性，该微信版本在Android 11及以上系统版本的设备上运行时，授权登录、分享、微信支付等功能受到影响，可能无法正常使用。为了适配 Android 系统新版本特性，保证微信功能正常使用，请第三方应用2021年11月1日之前进行更新
 
