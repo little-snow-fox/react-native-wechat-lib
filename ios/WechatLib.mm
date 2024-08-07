@@ -114,28 +114,23 @@ RCT_EXPORT_METHOD(registerApp
 //     callback(@[[WXApi registerApp:appid withDescription:appdesc] ? [NSNull null] : INVOKE_FAILED]);
 // }
 
-RCT_EXPORT_METHOD(isWXAppInstalled
-                  :(RCTResponseSenderBlock)callback) {
+RCT_EXPORT_METHOD(isWXAppInstalled:(RCTResponseSenderBlock)callback) {
     callback(@[[NSNull null], @([WXApi isWXAppInstalled])]);
 }
 
-RCT_EXPORT_METHOD(isWXAppSupportApi
-                  :(RCTResponseSenderBlock)callback) {
+RCT_EXPORT_METHOD(isWXAppSupportApi:(RCTResponseSenderBlock)callback) {
     callback(@[[NSNull null], @([WXApi isWXAppSupportApi])]);
 }
 
-RCT_EXPORT_METHOD(getWXAppInstallUrl
-                  :(RCTResponseSenderBlock)callback) {
+RCT_EXPORT_METHOD(getWXAppInstallUrl:(RCTResponseSenderBlock)callback) {
     callback(@[[NSNull null], [WXApi getWXAppInstallUrl]]);
 }
 
-RCT_EXPORT_METHOD(getApiVersion
-                  :(RCTResponseSenderBlock)callback) {
+RCT_EXPORT_METHOD(getApiVersion:(RCTResponseSenderBlock)callback) {
     callback(@[[NSNull null], [WXApi getApiVersion]]);
 }
 
-RCT_EXPORT_METHOD(openWXApp
-                  :(RCTResponseSenderBlock)callback) {
+RCT_EXPORT_METHOD(openWXApp:(RCTResponseSenderBlock)callback) {
     callback(@[([WXApi openWXApp] ? [NSNull null] : INVOKE_FAILED)]);
 }
 
