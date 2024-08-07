@@ -100,9 +100,9 @@ RCT_EXPORT_MODULE()
 }
 
 RCT_EXPORT_METHOD(registerApp
-                  : (NSString *)appid
-                  : (NSString *)universalLink
-                  : (RCTResponseSenderBlock)callback) {
+                  :(NSString *)appid
+                  :(NSString *)universalLink
+                  :(RCTResponseSenderBlock)callback) {
     self.appId = appid;
     callback(@[[WXApi registerApp:appid universalLink:universalLink] ? [NSNull null] : INVOKE_FAILED]);
 }
@@ -115,33 +115,33 @@ RCT_EXPORT_METHOD(registerApp
 // }
 
 RCT_EXPORT_METHOD(isWXAppInstalled
-                  : (RCTResponseSenderBlock)callback) {
+                  :(RCTResponseSenderBlock)callback) {
     callback(@[[NSNull null], @([WXApi isWXAppInstalled])]);
 }
 
 RCT_EXPORT_METHOD(isWXAppSupportApi
-                  : (RCTResponseSenderBlock)callback) {
+                  :(RCTResponseSenderBlock)callback) {
     callback(@[[NSNull null], @([WXApi isWXAppSupportApi])]);
 }
 
 RCT_EXPORT_METHOD(getWXAppInstallUrl
-                  : (RCTResponseSenderBlock)callback) {
+                  :(RCTResponseSenderBlock)callback) {
     callback(@[[NSNull null], [WXApi getWXAppInstallUrl]]);
 }
 
 RCT_EXPORT_METHOD(getApiVersion
-                  : (RCTResponseSenderBlock)callback) {
+                  :(RCTResponseSenderBlock)callback) {
     callback(@[[NSNull null], [WXApi getApiVersion]]);
 }
 
 RCT_EXPORT_METHOD(openWXApp
-                  : (RCTResponseSenderBlock)callback) {
+                  :(RCTResponseSenderBlock)callback) {
     callback(@[([WXApi openWXApp] ? [NSNull null] : INVOKE_FAILED)]);
 }
 
 RCT_EXPORT_METHOD(sendRequest
-                  : (NSString *)openid
-                  : (RCTResponseSenderBlock)callback) {
+                  :(NSString *)openid
+                  :(RCTResponseSenderBlock)callback) {
     BaseReq *req = [[BaseReq alloc] init];
     req.openID = openid;
     // callback(@[[WXApi sendReq:req] ? [NSNull null] : INVOKE_FAILED]);
@@ -154,9 +154,9 @@ RCT_EXPORT_METHOD(sendRequest
 }
 
 RCT_EXPORT_METHOD(sendAuthRequest
-                  : (NSString *)scope
-                  : (NSString *)state
-                  : (RCTResponseSenderBlock)callback) {
+                  :(NSString *)scope
+                  :(NSString *)state
+                  :(RCTResponseSenderBlock)callback) {
     SendAuthReq *req = [[SendAuthReq alloc] init];
     req.scope = scope;
     req.state = state;
@@ -170,7 +170,7 @@ RCT_EXPORT_METHOD(sendAuthRequest
 }
 
 RCT_EXPORT_METHOD(sendSuccessResponse
-                  : (RCTResponseSenderBlock)callback) {
+                  :(RCTResponseSenderBlock)callback) {
     BaseResp *resp = [[BaseResp alloc] init];
     resp.errCode = WXSuccess;
     void (^completion)(BOOL);
@@ -183,8 +183,8 @@ RCT_EXPORT_METHOD(sendSuccessResponse
 }
 
 RCT_EXPORT_METHOD(sendErrorCommonResponse
-                  : (NSString *)message
-                  : (RCTResponseSenderBlock)callback) {
+                  :(NSString *)message
+                  :(RCTResponseSenderBlock)callback) {
     BaseResp *resp = [[BaseResp alloc] init];
     resp.errCode = WXErrCodeCommon;
     resp.errStr = message;
@@ -198,8 +198,8 @@ RCT_EXPORT_METHOD(sendErrorCommonResponse
 }
 
 RCT_EXPORT_METHOD(sendErrorUserCancelResponse
-                  : (NSString *)message
-                  : (RCTResponseSenderBlock)callback) {
+                  :(NSString *)message
+                  :(RCTResponseSenderBlock)callback) {
     BaseResp *resp = [[BaseResp alloc] init];
     resp.errCode = WXErrCodeUserCancel;
     resp.errStr = message;
@@ -214,8 +214,8 @@ RCT_EXPORT_METHOD(sendErrorUserCancelResponse
 
 // 分享文本
 RCT_EXPORT_METHOD(shareText
-                  : (NSDictionary *)data
-                  : (RCTResponseSenderBlock)callback) {
+                  :(NSDictionary *)data
+                  :(RCTResponseSenderBlock)callback) {
     SendMessageToWXReq *req = [[SendMessageToWXReq alloc] init];
     req.bText = YES;
     req.text = data[@"text"];
@@ -230,8 +230,8 @@ RCT_EXPORT_METHOD(shareText
 
 // 选择发票
 RCT_EXPORT_METHOD(chooseInvoice
-                  : (NSDictionary *)data
-                  : (RCTResponseSenderBlock)callback) {
+                  :(NSDictionary *)data
+                  :(RCTResponseSenderBlock)callback) {
     WXChooseInvoiceReq *req = [[WXChooseInvoiceReq alloc] init];
     req.appID = self.appId;
     req.timeStamp = [data[@"timeStamp"] intValue];
@@ -249,8 +249,8 @@ RCT_EXPORT_METHOD(chooseInvoice
 
 // 分享文件
 RCT_EXPORT_METHOD(shareFile
-                  : (NSDictionary *)data
-                  : (RCTResponseSenderBlock)callback) {
+                  :(NSDictionary *)data
+                  :(RCTResponseSenderBlock)callback) {
     NSString *url = data[@"url"];
     WXFileObject *file = [[WXFileObject alloc] init];
     file.fileExtension = data[@"ext"];
@@ -281,8 +281,8 @@ RCT_EXPORT_METHOD(shareFile
 
 // 分享图片
 RCT_EXPORT_METHOD(shareImage
-                  : (NSDictionary *)data
-                  : (RCTResponseSenderBlock)callback) {
+                  :(NSDictionary *)data
+                  :(RCTResponseSenderBlock)callback) {
     NSString *imageUrl = data[@"imageUrl"];
     if (imageUrl == NULL || [imageUrl isEqual:@""]) {
         callback([NSArray arrayWithObject:@"shareImage: The value of ImageUrl cannot be empty."]);
@@ -324,8 +324,8 @@ RCT_EXPORT_METHOD(shareImage
 
 // 分享本地图片
 RCT_EXPORT_METHOD(shareLocalImage
-                  : (NSDictionary *)data
-                  : (RCTResponseSenderBlock)callback) {
+                  :(NSDictionary *)data
+                  :(RCTResponseSenderBlock)callback) {
     NSString *imageUrl = data[@"imageUrl"];
     if (imageUrl == NULL || [imageUrl isEqual:@""]) {
         callback([NSArray arrayWithObject:@"shareLocalImage: The value of ImageUrl cannot be empty."]);
@@ -367,8 +367,8 @@ RCT_EXPORT_METHOD(shareLocalImage
 
 // 分享音乐
 RCT_EXPORT_METHOD(shareMusic
-                  : (NSDictionary *)data
-                  : (RCTResponseSenderBlock)callback) {
+                  :(NSDictionary *)data
+                  :(RCTResponseSenderBlock)callback) {
     WXMusicObject *musicObject = [WXMusicObject object];
     musicObject.musicUrl = data[@"musicUrl"];
     musicObject.musicLowBandUrl = data[@"musicLowBandUrl"];
@@ -399,8 +399,8 @@ RCT_EXPORT_METHOD(shareMusic
 
 // 分享视频
 RCT_EXPORT_METHOD(shareVideo
-                  : (NSDictionary *)data
-                  : (RCTResponseSenderBlock)callback) {
+                  :(NSDictionary *)data
+                  :(RCTResponseSenderBlock)callback) {
     WXVideoObject *videoObject = [WXVideoObject object];
     videoObject.videoUrl = data[@"videoUrl"];
     videoObject.videoLowBandUrl = data[@"videoLowBandUrl"];
@@ -426,8 +426,8 @@ RCT_EXPORT_METHOD(shareVideo
 }
 // 分享网页
 RCT_EXPORT_METHOD(shareWebpage
-                  : (NSDictionary *)data
-                  : (RCTResponseSenderBlock)callback) {
+                  :(NSDictionary *)data
+                  :(RCTResponseSenderBlock)callback) {
     WXWebpageObject *webpageObject = [WXWebpageObject object];
     webpageObject.webpageUrl = data[@"webpageUrl"];
     WXMediaMessage *message = [WXMediaMessage message];
@@ -453,8 +453,8 @@ RCT_EXPORT_METHOD(shareWebpage
 
 // 分享小程序
 RCT_EXPORT_METHOD(shareMiniProgram
-                  : (NSDictionary *)data
-                  : (RCTResponseSenderBlock)callback) {
+                  :(NSDictionary *)data
+                  :(RCTResponseSenderBlock)callback) {
     WXMiniProgramObject *object = [WXMiniProgramObject object];
     object.webpageUrl = data[@"webpageUrl"];
     object.userName = data[@"userName"];
@@ -493,8 +493,8 @@ RCT_EXPORT_METHOD(shareMiniProgram
 
 // 一次性订阅消息
 RCT_EXPORT_METHOD(subscribeMessage
-                  : (NSDictionary *)data
-                  : (RCTResponseSenderBlock)callback) {
+                  :(NSDictionary *)data
+                  :(RCTResponseSenderBlock)callback) {
     WXSubscribeMsgReq *req = [[WXSubscribeMsgReq alloc] init];
     req.scene = [data[@"scene"] integerValue];
     req.templateId = data[@"templateId"];
@@ -508,8 +508,8 @@ RCT_EXPORT_METHOD(subscribeMessage
 }
 
 RCT_EXPORT_METHOD(launchMiniProgram
-                  : (NSDictionary *)data
-                  : (RCTResponseSenderBlock)callback) {
+                  :(NSDictionary *)data
+                  :(RCTResponseSenderBlock)callback) {
     WXLaunchMiniProgramReq *launchMiniProgramReq = [WXLaunchMiniProgramReq object];
     // 拉起的小程序的 username
     launchMiniProgramReq.userName = data[@"userName"];
@@ -530,8 +530,8 @@ RCT_EXPORT_METHOD(launchMiniProgram
 }
 
 RCT_EXPORT_METHOD(pay
-                  : (NSDictionary *)data
-                  : (RCTResponseSenderBlock)callback) {
+                  :(NSDictionary *)data
+                  :(RCTResponseSenderBlock)callback) {
     PayReq *req = [PayReq new];
     req.partnerId = data[@"partnerId"];
     req.prepayId = data[@"prepayId"];
@@ -551,9 +551,9 @@ RCT_EXPORT_METHOD(pay
 
 // 跳转微信客服
 RCT_EXPORT_METHOD(openCustomerServiceChat
-                  : (NSString *)corpId
-                  : (NSString *)kfUrl
-                  : (RCTResponseSenderBlock)callback) {
+                  :(NSString *)corpId
+                  :(NSString *)kfUrl
+                  :(RCTResponseSenderBlock)callback) {
     WXOpenCustomerServiceReq *req = [[WXOpenCustomerServiceReq alloc] init];
     req.corpid = corpId;  // 企业 ID
     req.url = kfUrl;  // 客服 URL
