@@ -261,7 +261,7 @@ public class WeChatLibModule extends ReactContextBaseJavaModule implements IWXAP
         }
 
         Uri contentUri = FileProvider.getUriForFile(context, 
-            "com.norcy.iread.fileprovider",  // 要与`AndroidManifest.xml`里配置的`authorities`一致
+            context.getPackageName() + ".fileprovider",  // 要与`AndroidManifest.xml`里配置的`authorities`一致
             file);
 
         // 授权给微信访问路径
