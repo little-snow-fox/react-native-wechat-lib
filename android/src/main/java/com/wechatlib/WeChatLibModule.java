@@ -255,6 +255,21 @@ public class WeChatLibModule extends ReactContextBaseJavaModule implements IWXAP
         return data;
     }
 
+    public String getFileUri(Context context, File file) {
+        if (file == null || !file.exists()) {
+            return null;
+        }
+
+        Uri contentUri = FileProvider.getUriForFile(context, 
+            context.getPackageName() + ".fileprovider",  // 要与`AndroidManifest.xml`里配置的`authorities`一致
+            file);
+
+        // 授权给微信访问路径
+        context.grantUriPermission("com.tencent.mm",  // 这里填微信包名
+            contentUri, Intent.FLAG_GRANT_READ_URI_PERMISSION);
+
+        return contentUri.toString();   // contentUri.toString() 即是以"content://"开头的用于共享的路径
+    }
 
     /**
      * 分享文本
@@ -265,7 +280,15 @@ public class WeChatLibModule extends ReactContextBaseJavaModule implements IWXAP
     @ReactMethod
     public void shareFile(ReadableMap data, Callback callback) throws Exception {
         WXFileObject fileObj = new WXFileObject();
-        fileObj.fileData = loadRawDataFromURL(data.getString("url"));
+
+        String url = data.getString("url");
+        if (url.startsWith("http")) {
+            fileObj.fileData = loadRawDataFromURL(url);
+        } else {
+            File file = new File(url);
+            String fileUri = getFileUri(getReactApplicationContext(), file);
+            fileObj.filePath = fileUri;
+        }
 
         WXMediaMessage msg = new WXMediaMessage();
         msg.mediaObject = fileObj;
