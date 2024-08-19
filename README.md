@@ -154,32 +154,32 @@ following fields:
 | lang    | String | The user language                   |
 | country | String | The user country                    |
 
-#### authByScan([scope, nonceStr, timestamp, scope, signature, schemeData, callback]) 微信扫码授权登录
+#### authByScan([scope, nonceStr, onQRGet]) 微信扫码授权登录
 
-- `appid` {String} the appid you get from WeChat dashboard
-- `nonceStr` 
-- `timestamp`
-- `scope` 写死 snsapi_userinfo 即可 
-- `signature` 签名
-- `schemeData` 留空即可
-- `callback` (object) => void
+- `appId` {String} the appId you get from WeChat dashboard
+- `appSecret` {String} the appSecret you get from WeChat dashboard
+- `onQRGet` (String) => void
 
 调用 authByScan 后，需要监听二维码的获取，展示完二维码，用户扫码登录完成后才会回调 callback，字段如下
 
 | field   | type   | description                         |
 | ------- | ------ | ----------------------------------- |
 | errCode | Number | Error Code                          |
-| authCode  | String | Auth Code |
+| errStr  | String | Error message if any error occurred |
+| nickname | String | 微信昵称 |
+| headimgurl | String | 微信头像链接 |
+| openid | String | openid |
+| unionid | String | unionid |
 
 
-如何监听二维码的获取呢？如下示例，拿到二维码的本地图片链接后，使用 Image 等标签进行展示即可
+示例如下
 
 ```js
-const qrcodeEmitter = new NativeEventEmitter(NativeModules.WeChat);
-
-const subscription = qrcodeEmitter.addListener('onAuthGotQrcode', (res) =>
-  console.log(res.qrcode)
-);
+const ret = await WeChat.authByScan(WeiXinId, WeiXinSecret, (qrcode) => {
+  console.log(qrcode)
+  // 拿到 qrcode 用 Image 去渲染
+});  
+console.log('登录信息', ret);
 ```
 
 如有不懂，可以查看[微信官方文档](https://developers.weixin.qq.com/doc/oplatform/Mobile_App/WeChat_Login/Login_via_Scan.html)
