@@ -187,7 +187,7 @@ public class WeChatLibModule extends ReactContextBaseJavaModule implements IWXAP
         WritableMap map = Arguments.createMap();
         map.putString("authCode", var2);
         map.putInt("errCode", var1.getCode());
-        callback.invoke(map);
+        callback.invoke(null, map);
       }
     });
   }

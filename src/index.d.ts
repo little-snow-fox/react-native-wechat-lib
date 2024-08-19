@@ -46,10 +46,20 @@ declare module 'react-native-wechat-lib' {
     state?: string;
     returnKey?: string;
   }
+  export interface ScanLoginResp {
+    nickname?: string;
+    headimgurl?: string;
+    openid?: string;
+    unionid?: string;
+    errCode?: number;
+    errStr?: string;
+  }
   export function sendAuthRequest(
     scope: string | string[],
     state?: string
   ): Promise<AuthResponse>;
+  export function authByScan(appId: string, appSecret: string, onQRGet: (qrcode: string)=>void): Promise<ScanLoginResp>;
+
   export interface ShareMetadata {
     type:
       | 'news'

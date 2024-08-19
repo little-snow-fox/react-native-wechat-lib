@@ -695,7 +695,7 @@ RCT_EXPORT_METHOD(authByScan:(NSString *)appid
 - (void)onAuthFinish:(int)errCode AuthCode:(nullable NSString *)authCode {
     NSLog(@"onAuthFinish");
     if (self.scanCallback) {
-        self.scanCallback(@[@{@"authCode": authCode?:@"", @"errCode": @(errCode)}]);
+        self.scanCallback(@[[NSNull null], @{@"authCode": authCode?:@"", @"errCode": @(errCode)}]);
         self.scanCallback = nil;
     }
 }
