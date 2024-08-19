@@ -8,6 +8,7 @@ import android.net.Uri;
 import android.os.Environment;
 
 import androidx.annotation.Nullable;
+import androidx.core.content.FileProvider;
 
 import com.facebook.common.executors.UiThreadImmediateExecutorService;
 import com.facebook.common.internal.Files;
@@ -260,7 +261,7 @@ public class WeChatLibModule extends ReactContextBaseJavaModule implements IWXAP
             return null;
         }
 
-        Uri contentUri = FileProvider.getUriForFile(context, 
+        Uri contentUri = FileProvider.getUriForFile(context,
             context.getPackageName() + ".fileprovider",  // 要与`AndroidManifest.xml`里配置的`authorities`一致
             file);
 
