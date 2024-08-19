@@ -371,8 +371,8 @@ export function chooseInvoice(data = {}) {
           const cardItemList = JSON.parse(resp.cardItemList);
           resp.cards = cardItemList
             ? cardItemList.map((item) => ({
-            cardId: item.card_id,
-            encryptCode: item.encrypt_code,
+              cardId: item.card_id,
+              encryptCode: item.encrypt_code,
               }))
             : [];
         }
