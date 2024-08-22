@@ -154,6 +154,36 @@ following fields:
 | lang    | String | The user language                   |
 | country | String | The user country                    |
 
+#### authByScan([scope, nonceStr, onQRGet]) 微信扫码授权登录
+
+- `appId` {String} the appId you get from WeChat dashboard
+- `appSecret` {String} the appSecret you get from WeChat dashboard
+- `onQRGet` (String) => void
+
+调用 authByScan 后，需要监听二维码的获取，展示完二维码，用户扫码登录完成后才会回调 callback，字段如下
+
+| field   | type   | description                         |
+| ------- | ------ | ----------------------------------- |
+| errCode | Number | Error Code                          |
+| errStr  | String | Error message if any error occurred |
+| nickname | String | 微信昵称 |
+| headimgurl | String | 微信头像链接 |
+| openid | String | openid |
+| unionid | String | unionid |
+
+
+示例如下
+
+```js
+const ret = await WeChat.authByScan(WeiXinId, WeiXinSecret, (qrcode) => {
+  console.log(qrcode)
+  // 拿到 qrcode 用 Image 去渲染
+});  
+console.log('登录信息', ret);
+```
+
+如有不懂，可以查看[微信官方文档](https://developers.weixin.qq.com/doc/oplatform/Mobile_App/WeChat_Login/Login_via_Scan.html)
+
 #### ShareText(ShareTextMetadata) 分享文本
 
 ShareTextMetadata

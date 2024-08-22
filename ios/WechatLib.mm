@@ -5,6 +5,13 @@
 #import <React/RCTEventDispatcher.h>
 #import <React/RCTImageLoader.h>
 #import <React/RCTLog.h>
+#import "WechatAuthSDK.h"
+
+
+@interface WechatLib () <WechatAuthAPIDelegate>
+@property (nonatomic, strong) WechatAuthSDK *authSDK;
+@property (nonatomic, strong) RCTResponseSenderBlock scanCallback;
+@end
 
 @implementation WechatLib
 
@@ -20,6 +27,8 @@ RCT_EXPORT_MODULE()
     self = [super init];
     if (self) {
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleOpenURL:) name:@"RCTOpenURLNotification" object:nil];
+        self.authSDK = [[WechatAuthSDK alloc] init];
+        self.authSDK.delegate = self;
     }
     return self;
 }
@@ -642,6 +651,58 @@ RCT_EXPORT_METHOD(openCustomerServiceChat
             break;
     }
     return type;
+}
+
+#pragma mark - WechatAuthAPIDelegate
+
+RCT_EXPORT_METHOD(addListener:(NSString *)eventName) {
+    
+}
+
+RCT_EXPORT_METHOD(removeListeners:(double)count) {
+    
+}
+
+RCT_EXPORT_METHOD(authByScan:(NSString *)appid
+                  nonceStr:(NSString *)nonceStr
+                 timeStamp:(NSString *)timeStamp
+                     scope:(NSString *)scope
+                 signature:(NSString *)signature
+                schemeData:(nullable NSString *)schemeData
+                  callback:(RCTResponseSenderBlock)callback) {
+    self.scanCallback = callback;
+    [self.authSDK StopAuth];
+    [self.authSDK Auth:appid nonceStr:nonceStr timeStamp:timeStamp scope:scope signature:signature schemeData:schemeData];
+}
+
+//得到二维码
+- (void)onAuthGotQrcode:(UIImage *)image {
+    NSLog(@"onAuthGotQrcode");
+    NSData *imageData = UIImagePNGRepresentation(image);
+    if (!imageData) {
+        imageData = UIImageJPEGRepresentation(image, 1);
+    }
+    NSString *base64String = [imageData base64EncodedStringWithOptions:0];
+    [self.bridge.eventDispatcher sendDeviceEventWithName:@"onAuthGotQrcode" body:@{@"qrcode": base64String}];
+}
+
+//二维码被扫描
+- (void)onQrcodeScanned {
+    NSLog(@"onQrcodeScanned");
+}
+
+//成功登录
+- (void)onAuthFinish:(int)errCode AuthCode:(nullable NSString *)authCode {
+    NSLog(@"onAuthFinish");
+    if (self.scanCallback) {
+        self.scanCallback(@[[NSNull null], @{@"authCode": authCode?:@"", @"errCode": @(errCode)}]);
+        self.scanCallback = nil;
+    }
+}
+
+- (NSArray<NSString *> *)supportedEvents
+{
+  return @[@"onAuthGotQrcode", @"onQrcodeScanned", @"onAuthFinish"];
 }
 
 @end
