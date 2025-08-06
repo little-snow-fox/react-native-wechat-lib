@@ -100,7 +100,7 @@ public class WeChatModule extends ReactContextBaseJavaModule implements IWXAPIEv
 
     @Override
     public String getName() {
-        return "RCTWeChat";
+        return "WeChat";
     }
 
     /**
@@ -122,8 +122,8 @@ public class WeChatModule extends ReactContextBaseJavaModule implements IWXAPIEv
     }
 
     @Override
-    public void onCatalystInstanceDestroy() {
-        super.onCatalystInstanceDestroy();
+    public void invalidate() {
+        super.invalidate();
         if (api != null) {
             api = null;
         }
