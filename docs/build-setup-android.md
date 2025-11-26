@@ -162,5 +162,5 @@ android:launchMode="singleTask"
       参见 https://developers.weixin.qq.com/doc/oplatform/Mobile_App/Access_Guide/Android.html#jump2
     -->
     <package android:name="com.tencent.mm" />
-/queries>
+</queries>
 ```
