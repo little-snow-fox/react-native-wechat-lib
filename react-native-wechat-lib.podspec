@@ -19,7 +19,9 @@ Pod::Spec.new do |s|
   s.dependency "React-Core"
 
   # Don't install the dependencies when we run `pod install` in the old architecture.
-  if ENV['RCT_NEW_ARCH_ENABLED'] == '1' then
+  if respond_to?(:install_modules_dependencies, true)
+    install_modules_dependencies(s)
+  elseif ENV['RCT_NEW_ARCH_ENABLED'] == '1' then
     s.compiler_flags = folly_compiler_flags + " -DRCT_NEW_ARCH_ENABLED=1"
     s.pod_target_xcconfig    = {
         "HEADER_SEARCH_PATHS" => "\"$(PODS_ROOT)/boost\"",
