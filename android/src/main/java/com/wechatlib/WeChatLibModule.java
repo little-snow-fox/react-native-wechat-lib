@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
-import android.os.Environment;
 import android.util.Base64;
 
 import androidx.annotation.Nullable;
@@ -65,10 +64,6 @@ import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URI;
@@ -94,24 +89,32 @@ public class WeChatLibModule extends ReactContextBaseJavaModule implements IWXAP
     }
 
     private static byte[] bitmapResizeGetBytes(Bitmap image, int size) {
-        // little-snow-fox 2019.10.20
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        // 质量压缩方法，这里100表示第一次不压缩，把压缩后的数据缓存到 baos
-        image.compress(Bitmap.CompressFormat.JPEG, 100, baos);
-        int options = 100;
-        // 循环判断压缩后依然大于 32kb 则继续压缩
-        while (baos.toByteArray().length / 1024 > size) {
-            // 重置baos即清空baos
-            baos.reset();
-            if (options > 10) {
-                options -= 8;
-            } else {
-                return bitmapResizeGetBytes(Bitmap.createScaledBitmap(image, 280, image.getHeight() / image.getWidth() * 280, true), size);
+        Bitmap thumbnail = null;
+        try {
+            int maxDimension = 150;
+            int width = image.getWidth();
+            int height = image.getHeight();
+
+            float scale = Math.min(1.0f, Math.min((float) maxDimension / width, (float) maxDimension / height));
+            int targetWidth = Math.max(1, (int) (width * scale));
+            int targetHeight = Math.max(1, (int) (height * scale));
+
+            thumbnail = Bitmap.createScaledBitmap(image, targetWidth, targetHeight, true);
+
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            thumbnail.compress(Bitmap.CompressFormat.JPEG, 75, baos);
+
+            if (baos.toByteArray().length / 1024 > size) {
+                baos.reset();
+                thumbnail.compress(Bitmap.CompressFormat.JPEG, 50, baos);
             }
-            // 这里压缩options%，把压缩后的数据存放到baos中
-            image.compress(Bitmap.CompressFormat.JPEG, options, baos);
+
+            return baos.toByteArray();
+        } finally {
+            if (thumbnail != null && thumbnail != image) {
+                thumbnail.recycle();
+            }
         }
-        return baos.toByteArray();
     }
 
     public WeChatLibModule(ReactApplicationContext context) {
@@ -414,57 +417,53 @@ public class WeChatLibModule extends ReactContextBaseJavaModule implements IWXAP
      */
     @ReactMethod
     public void shareLocalImage(final ReadableMap data, final Callback callback) {
-        FileInputStream fs = null;
+        Bitmap bmp = null;
         try {
             String path = data.getString("imageUrl");
             if (path.indexOf("file://") > -1) {
                 path = path.substring(7);
             }
-//            int maxWidth = data.hasKey("maxWidth") ? data.getInt("maxWidth") : -1;
-            fs = new FileInputStream(path);
-            Bitmap bmp = BitmapFactory.decodeStream(fs);
 
-//            if (maxWidth > 0) {
-//                bmp = Bitmap.createScaledBitmap(bmp, maxWidth, bmp.getHeight() / bmp.getWidth() * maxWidth, true);
-//            }
+            BitmapFactory.Options options = new BitmapFactory.Options();
+            options.inJustDecodeBounds = true;
+            BitmapFactory.decodeFile(path, options);
 
-//            File f = Environment.getExternalStoragePublicDirectory(SDCARD_ROOT + "/react-native-wechat-lib");
-//            String fileName = "wechat-share.jpg";
-//            String tempPath = SDCARD_ROOT + "/react-native-wechat-lib";
-//            File file = new File(f, fileName);
-//            try {
-//                FileOutputStream fos = new FileOutputStream(file);
-//                bmp.compress(Bitmap.CompressFormat.JPEG, 100, fos);
-//                fos.flush();
-//                fos.close();
-//            } catch (FileNotFoundException e) {
-//                e.printStackTrace();
-//            } catch (IOException e) {
-//                e.printStackTrace();
-//            }
+            int width = options.outWidth;
+            int height = options.outHeight;
+            long totalPixels = (long) width * height;
+            long maxPixels = 2048L * 2048L;
 
-//            int size = bmp.getByteCount();
-//            ByteArrayOutputStream var2 = new ByteArrayOutputStream();
-//            bmp.compress(Bitmap.CompressFormat.JPEG, 85, var2);
-//            int size2 = var2.toByteArray().length;
-            // 初始化 WXImageObject 和 WXMediaMessage 对象
+            int inSampleSize = 1;
+            if (totalPixels > maxPixels) {
+                inSampleSize = (int) Math.ceil(Math.sqrt((double) totalPixels / maxPixels));
+            }
+
+            options.inJustDecodeBounds = false;
+            options.inSampleSize = inSampleSize;
+            bmp = BitmapFactory.decodeFile(path, options);
+
+            if (bmp == null) {
+                callback.invoke("decode image failed", false);
+                return;
+            }
 
             WXImageObject imgObj = new WXImageObject(bmp);
             WXMediaMessage msg = new WXMediaMessage();
             msg.mediaObject = imgObj;
-            // 设置缩略图
             msg.thumbData = bitmapResizeGetBytes(bmp, THUMB_SIZE);
-            bmp.recycle();
-            // 构造一个Req
+
             SendMessageToWX.Req req = new SendMessageToWX.Req();
             req.transaction = "img";
             req.message = msg;
-            // req.userOpenId = getOpenId();
             req.scene = data.hasKey("scene") ? data.getInt("scene") : SendMessageToWX.Req.WXSceneSession;
             callback.invoke(null, api.sendReq(req));
-        } catch (FileNotFoundException e) {
-            callback.invoke(null, false);
+        } catch (Exception e) {
+            callback.invoke(e.getMessage(), false);
             e.printStackTrace();
+        } finally {
+            if (bmp != null) {
+                bmp.recycle();
+            }
         }
     }
 
