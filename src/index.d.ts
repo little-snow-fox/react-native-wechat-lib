@@ -58,7 +58,11 @@ declare module 'react-native-wechat-lib' {
     scope: string | string[],
     state?: string
   ): Promise<AuthResponse>;
-  export function authByScan(appId: string, appSecret: string, onQRGet: (qrcode: string)=>void): Promise<ScanLoginResp>;
+  export function authByScan(
+    appId: string,
+    appSecret: string,
+    onQRGet: (qrcode: string) => void
+  ): Promise<ScanLoginResp>;
 
   export interface ShareMetadata {
     type:

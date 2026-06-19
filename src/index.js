@@ -2,7 +2,12 @@
 
 import { EventEmitter } from 'events';
 import { sha1 } from 'js-sha1';
-import { DeviceEventEmitter, NativeEventEmitter, NativeModules, Platform } from 'react-native';
+import {
+  DeviceEventEmitter,
+  NativeEventEmitter,
+  NativeModules,
+  Platform,
+} from 'react-native';
 
 let isAppRegistered = false;
 let { WeChat } = NativeModules;
@@ -190,12 +195,7 @@ const getSDKTicket = async (accessToken) => {
   return res.ticket;
 };
 
-const createSignature = (
-  WeiXinId,
-  nonceStr,
-  sdkTicket,
-  timestamp
-) => {
+const createSignature = (WeiXinId, nonceStr, sdkTicket, timestamp) => {
   const origin =
     'appid=' +
     WeiXinId +
@@ -210,12 +210,7 @@ const createSignature = (
   return ret;
 };
 
-const getUserInfo = (
-  WeiXinId,
-  WeiXinSecret,
-  code,
-  callback
-) => {
+const getUserInfo = (WeiXinId, WeiXinSecret, code, callback) => {
   let accessTokenUrl =
     'https://api.weixin.qq.com/sns/oauth2/access_token?appid=' +
     WeiXinId +
@@ -267,7 +262,7 @@ const generateObjectId = () => {
       return ((Math.random() * 16) | 0).toString(16).toLowerCase(); // eslint-disable-line no-bitwise
     })
   );
-}
+};
 
 /**
  * @method authByScan
@@ -286,29 +281,41 @@ export function authByScan(appId, appSecret, onQRGet) {
 
     const qrcodeEmitter = new NativeEventEmitter(NativeModules.WeChat);
 
-    const subscription = qrcodeEmitter.addListener('onAuthGotQrcode', (res) =>
-      onQRGet && onQRGet(res.qrcode)
+    const subscription = qrcodeEmitter.addListener(
+      'onAuthGotQrcode',
+      (res) => onQRGet && onQRGet(res.qrcode)
     );
 
-    const ret = await nativeScan(appId, nonceStr, timestamp, 'snsapi_userinfo', signature, '');
+    const ret = await nativeScan(
+      appId,
+      nonceStr,
+      timestamp,
+      'snsapi_userinfo',
+      signature,
+      ''
+    );
     // console.log('扫码结果', ret)
     subscription.remove();
     if (!ret?.authCode) {
-      reject(new WechatError({
-        errStr: 'Auth code 获取失败',
-        errCode: -1
-      }))
+      reject(
+        new WechatError({
+          errStr: 'Auth code 获取失败',
+          errCode: -1,
+        })
+      );
       return;
     }
     getUserInfo(appId, appSecret, ret?.authCode, (result) => {
       // console.log('扫码登录结果', result)
       if (!result.error) {
-        resolve(result)
+        resolve(result);
       } else {
-        reject(new WechatError({
-          errStr: '扫码登录失败' + JSON.stringify(e),
-          errCode: -2
-        }))
+        reject(
+          new WechatError({
+            errStr: '扫码登录失败' + JSON.stringify(result.error),
+            errCode: -2,
+          })
+        );
       }
     });
   });
@@ -367,8 +374,8 @@ export function chooseInvoice(data = {}) {
           const cardItemList = JSON.parse(resp.cardItemList);
           resp.cards = cardItemList
             ? cardItemList.map((item) => ({
-              cardId: item.card_id,
-              encryptCode: item.encrypt_code,
+                cardId: item.card_id,
+                encryptCode: item.encrypt_code,
               }))
             : [];
         }
