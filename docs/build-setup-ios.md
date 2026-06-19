@@ -93,5 +93,5 @@ Universal Links 配置文件, 没使用的话可以忽略。
 Mainly need to add '#import "WXApi.h"' and 'wxapidelegate'.  
 主要是需要加上 '#import "WXApi.h"' 和 'WXApiDelegate' 。
 
-## 4. 从版本 3.0.0 开始，需要手动导入 libWeChatSDK.a 到 XCode
-直接复制本项目的 /ios/libWeChatSDK.a 到 Xcode 项目根目录，详细可参考 example 工程
+## 4. 从版本 3.0.6 开始，CocoaPods 会自动链接 libWeChatSDK.a
+如果使用 3.0.5 或更早版本，仍需要手动将本项目的 /ios/libWeChatSDK.a 加入 Xcode 工程；3.0.6 及之后版本通过 podspec 自动声明。
