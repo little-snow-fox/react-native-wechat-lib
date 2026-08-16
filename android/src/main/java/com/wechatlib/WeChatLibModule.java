@@ -172,6 +172,7 @@ public class WeChatLibModule extends ReactContextBaseJavaModule implements IWXAP
 
     IDiffDevOAuth oauth = DiffDevOAuthFactory.getDiffDevOAuth();
     oauth.stopAuth();
+    oauth.removeAllListeners();
     oauth.auth(appid, scope, nonceStr, timeStamp, signature, new OAuthListener() {
       @Override
       public void onAuthGotQrcode(String var1, byte[] var2){
