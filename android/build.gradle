@@ -21,7 +21,7 @@ android {
 
 allprojects {
   repositories {
-    jcenter()
+    mavenCentral()
     maven { url "$projectDir/../../react-native/android" }
   }
 }
