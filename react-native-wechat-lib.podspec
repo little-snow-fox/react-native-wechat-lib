@@ -11,11 +11,12 @@ Pod::Spec.new do |s|
   s.license      = package["license"]
   s.authors      = package["author"]
 
-  s.platforms    = { :ios => "11.0" }
+  s.platforms    = { :ios => "12.0" }
   s.source       = { :git => "https://github.com/little-snow-fox/react-native-wechat-lib.git", :tag => "#{s.version}" }
 
   s.source_files = "ios/**/*.{h,m,mm}"
   s.vendored_libraries = "ios/libWeChatSDK.a"
+  s.resource_bundles = { "WechatPrivacy" => ["ios/PrivacyInfo.xcprivacy"] }
   s.frameworks = "SystemConfiguration", "CoreTelephony", "WebKit", "Security", "UIKit", "Foundation"
   s.libraries = "sqlite3", "c++", "z"
 

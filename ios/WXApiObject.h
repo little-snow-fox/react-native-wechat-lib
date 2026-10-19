@@ -308,6 +308,9 @@ typedef void(^WXCheckULCompletion)(WXULCheckStep step, WXCheckULStepResult* resu
 @property (nonatomic, copy, nullable) NSString *code;
 /** 第三方程序发送时用来标识其请求的唯一性的标志，由第三方程序调用sendReq时传入，由微信终端回传
  * @note state字符串长度不能超过1K
+ * @note 在复杂度较高的应用程序中，可能会出现其他模块请求的响应对象被错误地回调到当前模块。
+ * 为了避免影响其他模块，建议当前模块的开发者根据SendAuthResp的内容，采用白名单的方式进行处理。
+ * 例如，SendAuthResp.state符合预期时，才对其进行处理。
  */
 @property (nonatomic, copy, nullable) NSString *state;
 @property (nonatomic, copy, nullable) NSString *lang;
@@ -821,7 +824,7 @@ typedef void(^WXCheckULCompletion)(WXULCheckStep step, WXCheckULStepResult* resu
 /*! @brief 设置消息缩略图的方法
  *
  * @param image 缩略图
- * @note 大小不能超过64K
+ * @note 大小不能超过256K
  */
 - (void)setThumbImage:(UIImage *)image;
 
@@ -852,6 +855,17 @@ typedef void(^WXCheckULCompletion)(WXULCheckStep step, WXCheckULStepResult* resu
  * @note 使用sha256得到，用于计算签名
  */
 @property (nonatomic, copy, nullable) NSString *imgDataHash;
+
+/** 分享的图片消息是否要带小程序入口，若 'entranceMiniProgramUsername' 非空则显示
+ *  仅部分小程序类目可用
+ * @note 本字段为空则发送普通app图片消息
+ */
+@property (nonatomic, copy, nullable) NSString *entranceMiniProgramUsername;
+
+/** 分享的图片消息显示的小程序入口可以跳转的小程序路径
+ * 仅当 'entranceMiniProgramUsername' 非空时生效
+ */
+@property (nonatomic, copy, nullable) NSString *entranceMiniProgramPath;
 
 @end
 
@@ -1232,6 +1246,31 @@ typedef void(^WXCheckULCompletion)(WXULCheckStep step, WXCheckULStepResult* resu
 
 /** 业务所需的额外信息 */
 @property (nonatomic, strong, nullable) NSDictionary *extraInfoDic;
+
+@end
+
+@interface WXNativeGamePageObject : NSObject
+
+/** 是否为视频类型
+ */
+@property (nonatomic, assign) BOOL isVideo;
+
+/** 视频时长
+ @note 当为视频类型时，必填；单位为秒
+ */
+@property (nonatomic, assign) UInt32 videoDuration;
+
+/** 透传字段
+ @note 长度限制为100K
+ */
+@property (nonatomic, copy) NSString *shareData;
+
+/** 缩略图
+ @note 大小限制为256K
+ */
+@property (nonatomic, strong) NSData *gameThumbData;
+
++ (WXNativeGamePageObject *)object;
 
 @end
 

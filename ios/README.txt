@@ -1,4 +1,30 @@
 重要!
+SDK2.0.9
+1. 修复 XCFramework 版 CocoaPods 集成在 Apple Silicon 模拟器上无法使用的问题（移除 podspec 中错误的 arm64 模拟器架构排除配置；SDK 功能与 2.0.8 一致）
+
+SDK2.0.8
+1. 修复一些已知问题
+
+SDK2.0.7
+1. 增加支付拉起全链路上报（PayReq、JointPayReq 的发起、拉起、回包信息上报）
+
+SDK2.0.6
+1. 将全局CFURLCreateStringByAddingPercentEscapes替换成stringByAddingPercentEncodingWithAllowedCharacters
+
+SDK2.0.5
+1. 优化XCFramework打包方式
+2. 修复openWXApp偶现失败的问题
+
+SDK2.0.4
+1.增加privacy manifest文件
+2.修复跳微信时可能卡顿的问题
+
+SDK2.0.2
+1. 优化XCFramework打包方式
+
+SDK2.0.1
+1. SDK支持XCFramework
+
 SDK2.0.0
 1. 分享能力支持内容防篡改校验
 
