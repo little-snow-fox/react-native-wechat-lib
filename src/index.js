@@ -387,22 +387,31 @@ export function chooseInvoice(data = {}) {
   });
 }
 
+// 图片和文件分享发起失败时不会再收到微信分享结果，需要撤掉监听并把原生错误传给调用方，避免调用方一直等待且收不到失败。
+function shareMessage(nativeShare, data) {
+  return new Promise((resolve, reject) => {
+    nativeShare(data).catch((error) => {
+      emitter.removeListener('SendMessageToWX.Resp', onResponse);
+      reject(error);
+    });
+    const onResponse = (resp) => {
+      if (resp.errCode === 0) {
+        resolve(resp);
+      } else {
+        reject(new WechatError(resp));
+      }
+    };
+    emitter.once('SendMessageToWX.Resp', onResponse);
+  });
+}
+
 /**
  * Share File
  * @method shareFile
  * @param {Object} data
  */
 export function shareFile(data) {
-  return new Promise((resolve, reject) => {
-    nativeShareFile(data);
-    emitter.once('SendMessageToWX.Resp', (resp) => {
-      if (resp.errCode === 0) {
-        resolve(resp);
-      } else {
-        reject(new WechatError(resp));
-      }
-    });
-  });
+  return shareMessage(nativeShareFile, data);
 }
 
 /**
@@ -435,16 +444,7 @@ export function shareLocalImage(data) {
   if (data && data.scene == null) {
     data.scene = 0;
   }
-  return new Promise((resolve, reject) => {
-    nativeShareLocalImage(data);
-    emitter.once('SendMessageToWX.Resp', (resp) => {
-      if (resp.errCode === 0) {
-        resolve(resp);
-      } else {
-        reject(new WechatError(resp));
-      }
-    });
-  });
+  return shareMessage(nativeShareLocalImage, data);
 }
 
 /**
